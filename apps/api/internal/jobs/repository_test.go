@@ -84,6 +84,9 @@ func TestClaimConcurrentSafety(t *testing.T) {
 	if count != 1 {
 		t.Fatalf("expected exactly one claim, got %d", count)
 	}
+	t.Cleanup(func() {
+		_ = repo.MarkCompleted(context.Background(), jobID, time.Now().UTC())
+	})
 }
 
 func TestRetryExhaustionMarksFailed(t *testing.T) {

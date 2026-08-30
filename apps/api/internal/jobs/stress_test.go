@@ -17,6 +17,7 @@ func TestQueueStressConcurrentClaims(t *testing.T) {
 	_, _ = pool.Exec(ctx, `DELETE FROM background_jobs WHERE idempotency_key LIKE 'test:%'`)
 
 	const total = 40
+	idSet := make(map[uuid.UUID]struct{}, total)
 	ids := make([]string, 0, total)
 	for i := 0; i < total; i++ {
 		key := "test:stress:" + uuid.NewString()
@@ -24,6 +25,7 @@ func TestQueueStressConcurrentClaims(t *testing.T) {
 		if err != nil || !created {
 			t.Fatalf("enqueue %d: created=%v err=%v", i, created, err)
 		}
+		idSet[id] = struct{}{}
 		ids = append(ids, id.String())
 	}
 
@@ -33,12 +35,8 @@ func TestQueueStressConcurrentClaims(t *testing.T) {
 
 	var wg sync.WaitGroup
 	workers := 4
-	deadline := time.After(5 * time.Second)
-	done := make(chan struct{})
-	go func() {
-		<-deadline
-		close(done)
-	}()
+	runCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
 
 	for w := 0; w < workers; w++ {
 		wg.Add(1)
@@ -46,28 +44,43 @@ func TestQueueStressConcurrentClaims(t *testing.T) {
 			defer wg.Done()
 			for {
 				select {
-				case <-done:
+				case <-runCtx.Done():
 					return
 				default:
-					now := time.Now().UTC()
-					job, err := repo.ClaimNext(ctx, workerID, now)
-					if err != nil {
-						t.Error(err)
-						return
-					}
-					if job == nil {
-						time.Sleep(5 * time.Millisecond)
-						continue
-					}
-					if _, loaded := claimed.LoadOrStore(job.ID.String(), true); loaded {
-						duplicates.Add(1)
-					}
-					if err := repo.MarkCompleted(ctx, job.ID, now); err != nil {
-						t.Error(err)
-						return
-					}
-					completed.Add(1)
 				}
+				if int(completed.Load()) >= total {
+					return
+				}
+
+				now := time.Now().UTC()
+				job, err := repo.ClaimNext(runCtx, workerID, now)
+				if err != nil {
+					t.Error(err)
+					return
+				}
+				if job == nil {
+					time.Sleep(5 * time.Millisecond)
+					continue
+				}
+				if _, ok := idSet[job.ID]; !ok {
+					permanent, releaseErr := repo.MarkRetryable(runCtx, job.ID, job.Attempts, job.MaxAttempts, "stress test released foreign job", now, now)
+					if releaseErr != nil {
+						t.Error(releaseErr)
+						return
+					}
+					if permanent {
+						t.Errorf("unexpected permanent failure releasing foreign job %s", job.ID)
+					}
+					continue
+				}
+				if _, loaded := claimed.LoadOrStore(job.ID.String(), true); loaded {
+					duplicates.Add(1)
+				}
+				if err := repo.MarkCompleted(runCtx, job.ID, now); err != nil {
+					t.Error(err)
+					return
+				}
+				completed.Add(1)
 			}
 		}("stress-" + uuid.NewString()[:4])
 	}
