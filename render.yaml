@@ -52,30 +52,34 @@ services:
   #   name: careeros-worker
   #   ...
 
-  - type: cron
-    name: careeros-ingest
-    runtime: docker
-    dockerfilePath: ./infrastructure/docker/Dockerfile.ingest
-    dockerContext: .
-    schedule: "0 */6 * * *"
-    plan: free
-    envVars:
-      - fromService:
-          name: careeros-api
-          type: web
-          envVarKey: DATABASE_URL
-      - key: LOG_LEVEL
-        value: info
-      - key: USAJOBS_API_KEY
-        fromService:
-          name: careeros-api
-          type: web
-          envVarKey: USAJOBS_API_KEY
-      - key: USAJOBS_USER_AGENT
-        fromService:
-          name: careeros-api
-          type: web
-          envVarKey: USAJOBS_USER_AGENT
+  # Cron jobs require a paid plan (~$1/mo). Run initial ingest manually after deploy:
+  #   DATABASE_URL=... USAJOBS_API_KEY=... USAJOBS_USER_AGENT=... make ingest
+  # To enable scheduled ingest later, uncomment and set plan: starter on the cron service.
+  # - type: cron
+  #   name: careeros-ingest
+  #   runtime: docker
+  #   dockerfilePath: ./infrastructure/docker/Dockerfile.ingest
+  #   dockerContext: .
+  #   schedule: "0 */6 * * *"
+  #   plan: starter
+  #   envVars:
+  #     - key: DATABASE_URL
+  #       fromService:
+  #         name: careeros-api
+  #         type: web
+  #         envVarKey: DATABASE_URL
+  #     - key: LOG_LEVEL
+  #       value: info
+  #     - key: USAJOBS_API_KEY
+  #       fromService:
+  #         name: careeros-api
+  #         type: web
+  #         envVarKey: USAJOBS_API_KEY
+  #     - key: USAJOBS_USER_AGENT
+  #       fromService:
+  #         name: careeros-api
+  #         type: web
+  #         envVarKey: USAJOBS_USER_AGENT
 
   - type: web
     name: careeros-web
