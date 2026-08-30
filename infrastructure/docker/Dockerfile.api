@@ -10,11 +10,23 @@ ARG SERVICE=server
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /out/service ./cmd/${SERVICE}
 
 FROM alpine:3.20
-RUN apk add --no-cache ca-certificates tzdata \
+ARG MIGRATE_VERSION=v4.18.1
+RUN apk add --no-cache ca-certificates tzdata curl \
+    && ARCH="$(uname -m)" \
+    && case "$ARCH" in \
+         x86_64) MARCH=amd64 ;; \
+         aarch64) MARCH=arm64 ;; \
+         *) echo "unsupported arch: $ARCH" >&2; exit 1 ;; \
+       esac \
+    && curl -fsSL "https://github.com/golang-migrate/migrate/releases/download/${MIGRATE_VERSION}/migrate.linux-${MARCH}.tar.gz" \
+         | tar xz -C /usr/local/bin migrate \
     && adduser -D -H -u 10001 appuser
 USER appuser
 WORKDIR /app
 COPY --from=builder /out/service /app/service
+COPY apps/api/migrations /app/migrations
+COPY infrastructure/docker/entrypoint-api.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 ENV CAREEROS_ENV=production
 EXPOSE 8080
-ENTRYPOINT ["/app/service"]
+ENTRYPOINT ["/app/entrypoint.sh"]
