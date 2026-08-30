@@ -25,11 +25,16 @@ if [[ -z "${USAJOBS_API_KEY:-}" || -z "${USAJOBS_USER_AGENT:-}" ]]; then
   exit 1
 fi
 
+# make ingest sources .env and would overwrite DATABASE_URL with localhost — run ingest directly.
 export DATABASE_URL="$PRODUCTION_DATABASE_URL"
 
 echo "Running opportunity ingest against production database..."
-cd "$ROOT"
-make ingest
+cd "$ROOT/apps/api"
+GO="${GO:-$(command -v go)}"
+if [[ -z "$GO" && -x "$HOME/.local/go/bin/go" ]]; then
+  GO="$HOME/.local/go/bin/go"
+fi
+"$GO" run ./cmd/ingest
 
 echo ""
 echo "Ingest complete. Browse should show live opportunities after the API reads the updated catalog."
