@@ -29,7 +29,10 @@ services:
       - key: JWT_EXPIRY_HOURS
         value: 168
       - key: CORS_ORIGIN
-        value: https://careeros-web.onrender.com
+        fromService:
+          name: careeros-web
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
       - key: COOKIE_SECURE
         value: true
       - key: COOKIE_SAMESITE
@@ -88,7 +91,10 @@ services:
     staticPublishPath: apps/web/dist
     envVars:
       - key: VITE_API_URL
-        value: https://careeros-api.onrender.com
+        fromService:
+          name: careeros-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
     routes:
       - type: rewrite
         source: /*
