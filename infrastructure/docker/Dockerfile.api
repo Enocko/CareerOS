@@ -21,12 +21,12 @@ RUN apk add --no-cache ca-certificates tzdata curl \
     && curl -fsSL "https://github.com/golang-migrate/migrate/releases/download/${MIGRATE_VERSION}/migrate.linux-${MARCH}.tar.gz" \
          | tar xz -C /usr/local/bin migrate \
     && adduser -D -H -u 10001 appuser
-USER appuser
 WORKDIR /app
 COPY --from=builder /out/service /app/service
 COPY apps/api/migrations /app/migrations
-COPY infrastructure/docker/entrypoint-api.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY --chmod=755 infrastructure/docker/entrypoint-api.sh /app/entrypoint.sh
+RUN chown -R appuser:appuser /app
+USER appuser
 ENV CAREEROS_ENV=production
 EXPOSE 8080
 ENTRYPOINT ["/app/entrypoint.sh"]
