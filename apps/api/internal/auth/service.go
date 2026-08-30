@@ -9,15 +9,21 @@ import (
 	"github.com/google/uuid"
 )
 
+// ProfileEnsurer creates a default student profile after registration.
+type ProfileEnsurer interface {
+	EnsureDefaultProfile(ctx context.Context, userID uuid.UUID) error
+}
+
 // Service handles authentication business logic.
 type Service struct {
-	repo   *Repository
-	tokens *TokenManager
+	repo     *Repository
+	tokens   *TokenManager
+	profiles ProfileEnsurer
 }
 
 // NewService creates a new auth Service.
-func NewService(repo *Repository, tokens *TokenManager) *Service {
-	return &Service{repo: repo, tokens: tokens}
+func NewService(repo *Repository, tokens *TokenManager, profiles ProfileEnsurer) *Service {
+	return &Service{repo: repo, tokens: tokens, profiles: profiles}
 }
 
 // Register creates a new user account and returns an auth response.
@@ -39,6 +45,12 @@ func (s *Service) Register(ctx context.Context, req RegisterRequest) (*AuthRespo
 			return nil, platform.NewAppError(http.StatusConflict, platform.ErrorCodeConflict, "Email already registered")
 		}
 		return nil, platform.InternalError()
+	}
+
+	if s.profiles != nil {
+		if err := s.profiles.EnsureDefaultProfile(ctx, user.ID); err != nil {
+			return nil, platform.InternalError()
+		}
 	}
 
 	token, err := s.tokens.Generate(user)
@@ -68,6 +80,12 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*AuthResponse, e
 
 	if !CheckPassword(user.PasswordHash, req.Password) {
 		return nil, platform.NewAppError(http.StatusUnauthorized, platform.ErrorCodeUnauthorized, "Invalid email or password")
+	}
+
+	if s.profiles != nil {
+		if err := s.profiles.EnsureDefaultProfile(ctx, user.ID); err != nil {
+			return nil, platform.InternalError()
+		}
 	}
 
 	token, err := s.tokens.Generate(user)

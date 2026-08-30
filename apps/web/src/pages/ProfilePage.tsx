@@ -47,7 +47,11 @@ export function ProfilePage() {
         setIsNew(false)
       })
       .catch((err) => {
-        if (err instanceof Error && err.message.includes('404')) {
+        if (
+          err instanceof Error &&
+          (err.message.toLowerCase().includes('profile not found') ||
+            err.message.includes('404'))
+        ) {
           setIsNew(true)
         } else {
           setError(err instanceof Error ? err.message : 'Failed to load profile')

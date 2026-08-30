@@ -43,18 +43,18 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 		r.With(middleware.MetricsAuth(cfg.MetricsToken)).Handle("/metrics", observability.MetricsHandler(pool))
 	}
 
+	profileRepo := profile.NewRepository(pool)
+	profileService := profile.NewService(profileRepo)
+	profileHandler := profile.NewHandler(profileService)
+
 	authRepo := auth.NewRepository(pool)
 	tokens := auth.NewTokenManager(cfg)
-	authService := auth.NewService(authRepo, tokens)
+	authService := auth.NewService(authRepo, tokens, profileService)
 	cookieCfg := auth.DefaultCookieConfig(cfg.CookieSecure, cfg.CookieSameSite)
 	tokenExpiry := time.Duration(cfg.JWTExpiryHours) * time.Hour
 	authHandler := auth.NewHandler(authService, cookieCfg, tokenExpiry)
 	authLimiter := middleware.NewRateLimiter(20, time.Minute)
 	reportLimiter := middleware.NewRateLimiter(10, time.Minute)
-
-	profileRepo := profile.NewRepository(pool)
-	profileService := profile.NewService(profileRepo)
-	profileHandler := profile.NewHandler(profileService)
 
 	oppRepo := opportunities.NewRepository(pool)
 	oppService := opportunities.NewService(oppRepo)

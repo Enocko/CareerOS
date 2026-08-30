@@ -38,17 +38,28 @@ func TestProfileGetPutUpsert(t *testing.T) {
 	router := setupTestRouter(t)
 	token := registerAndGetToken(t, router)
 
-	// GET before profile exists → 404
+	// GET after register returns the default starter profile
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusNotFound {
-		t.Fatalf("get before create: expected 404, got %d body=%s", rec.Code, rec.Body.String())
+	if rec.Code != http.StatusOK {
+		t.Fatalf("get after register: expected 200, got %d body=%s", rec.Code, rec.Body.String())
 	}
 
-	// PUT creates profile
+	var starter profile.Profile
+	if err := json.NewDecoder(rec.Body).Decode(&starter); err != nil {
+		t.Fatalf("decode starter profile: %v", err)
+	}
+	if starter.FirstName != nil {
+		t.Fatalf("expected empty starter profile, got first_name=%v", starter.FirstName)
+	}
+	if starter.University == nil || *starter.University != "Grambling State University" {
+		t.Errorf("expected default university, got %v", starter.University)
+	}
+
+	// PUT updates profile
 	year := 2027
 	updateBody, _ := json.Marshal(profile.UpdateRequest{
 		FirstName:       strPtr("Jordan"),

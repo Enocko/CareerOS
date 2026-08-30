@@ -2,8 +2,8 @@
 # Post-deploy verification for CareerOS on Render.
 set -euo pipefail
 
-API_URL="${API_URL:-https://careeros-api.onrender.com}"
-WEB_URL="${WEB_URL:-https://careeros-web.onrender.com}"
+API_URL="${API_URL:-https://careeros-api-oz2l.onrender.com}"
+WEB_URL="${WEB_URL:-https://careeros-web-e0ee.onrender.com}"
 
 echo "Checking API health at $API_URL/health ..."
 curl -fsS "$API_URL/health" | python3 -m json.tool
