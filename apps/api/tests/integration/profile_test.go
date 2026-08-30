@@ -55,15 +55,17 @@ func TestProfileGetPutUpsert(t *testing.T) {
 	if starter.FirstName != nil {
 		t.Fatalf("expected empty starter profile, got first_name=%v", starter.FirstName)
 	}
-	if starter.University == nil || *starter.University != "Grambling State University" {
-		t.Errorf("expected default university, got %v", starter.University)
+	if starter.University != nil {
+		t.Errorf("expected empty university on starter profile, got %v", starter.University)
 	}
 
 	// PUT updates profile
 	year := 2027
+	university := "Howard University"
 	updateBody, _ := json.Marshal(profile.UpdateRequest{
 		FirstName:       strPtr("Jordan"),
 		LastName:        strPtr("Smith"),
+		University:      &university,
 		Major:           strPtr("Computer Science"),
 		GraduationYear:  &year,
 		Skills:          []string{"Python", "Go"},
@@ -87,8 +89,8 @@ func TestProfileGetPutUpsert(t *testing.T) {
 	if created.FirstName == nil || *created.FirstName != "Jordan" {
 		t.Errorf("expected first name Jordan, got %v", created.FirstName)
 	}
-	if created.University == nil || *created.University != "Grambling State University" {
-		t.Errorf("expected default university, got %v", created.University)
+	if created.University == nil || *created.University != "Howard University" {
+		t.Errorf("expected university Howard University, got %v", created.University)
 	}
 
 	// GET returns profile

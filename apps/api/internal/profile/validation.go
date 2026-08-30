@@ -10,10 +10,9 @@ import (
 )
 
 const (
-	maxNameLength       = 100
-	minGraduationYear   = 2020
-	maxGraduationYear   = 2040
-	defaultUniversity   = "Grambling State University"
+	maxNameLength     = 100
+	minGraduationYear = 2020
+	maxGraduationYear = 2040
 )
 
 var (
@@ -113,15 +112,4 @@ func stringOrNil(s *string) *string {
 		return nil
 	}
 	return &trimmed
-}
-
-func universityOrDefault(s *string) string {
-	if s == nil {
-		return defaultUniversity
-	}
-	trimmed := strings.TrimSpace(*s)
-	if trimmed == "" {
-		return defaultUniversity
-	}
-	return trimmed
 }

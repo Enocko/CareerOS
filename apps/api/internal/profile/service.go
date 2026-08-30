@@ -44,9 +44,8 @@ func (s *Service) UpsertProfile(ctx context.Context, userID uuid.UUID, req Updat
 	return profile, nil
 }
 
-// EnsureDefaultProfile creates a starter profile for a newly registered student.
+// EnsureDefaultProfile creates a starter profile row for a newly registered student.
 func (s *Service) EnsureDefaultProfile(ctx context.Context, userID uuid.UUID) error {
-	university := defaultUniversity
-	_, err := s.repo.Upsert(ctx, userID, UpdateRequest{University: &university})
+	_, err := s.repo.Upsert(ctx, userID, UpdateRequest{})
 	return err
 }

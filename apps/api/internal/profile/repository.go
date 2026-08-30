@@ -54,7 +54,7 @@ func (r *Repository) GetByUserID(ctx context.Context, userID uuid.UUID) (*Profil
 
 // Upsert creates or updates a profile for the given user.
 func (r *Repository) Upsert(ctx context.Context, userID uuid.UUID, req UpdateRequest) (*Profile, error) {
-	university := universityOrDefault(req.University)
+	university := stringOrNil(req.University)
 
 	var p Profile
 	err := r.pool.QueryRow(ctx, `

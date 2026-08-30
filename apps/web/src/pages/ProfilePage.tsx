@@ -5,7 +5,7 @@ import type { Profile } from '../types'
 const emptyProfile: Partial<Profile> = {
   first_name: '',
   last_name: '',
-  university: 'Grambling State University',
+  university: '',
   major: '',
   graduation_year: undefined,
   career_interests: [],
@@ -128,6 +128,7 @@ export function ProfilePage() {
         <label>
           University
           <input
+            placeholder="e.g. Howard University, Spelman College, Grambling State University"
             value={form.university || ''}
             onChange={(e) => updateField('university', e.target.value)}
           />

@@ -72,20 +72,6 @@ func TestValidateUpdateRequest(t *testing.T) {
 	}
 }
 
-func TestUniversityOrDefault(t *testing.T) {
-	if got := universityOrDefault(nil); got != defaultUniversity {
-		t.Errorf("expected default university, got %s", got)
-	}
-	empty := ""
-	if got := universityOrDefault(&empty); got != defaultUniversity {
-		t.Errorf("expected default university for empty string, got %s", got)
-	}
-	custom := "Howard University"
-	if got := universityOrDefault(&custom); got != custom {
-		t.Errorf("expected custom university, got %s", got)
-	}
-}
-
 func TestNormalizeStringSlice(t *testing.T) {
 	if got := normalizeStringSlice(nil); len(got) != 0 {
 		t.Error("expected empty slice for nil input")
