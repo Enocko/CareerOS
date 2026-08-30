@@ -143,7 +143,7 @@ func TestUnifiedBrowseResearchUsesTypeAndOpportunityTypeParams(t *testing.T) {
 func TestUnifiedBrowseAllSearchReturnsBothTypes(t *testing.T) {
 	router, pool := setupTestRouterWithPool(t)
 	token := registerAndGetToken(t, router)
-	insertVerifiedEmploymentOpportunity(t, pool)
+	insertBrowsableEmploymentOpportunity(t, pool)
 	insertVerifiedResearchOpportunity(t, pool)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=all&q=Test&per_page=100", nil)

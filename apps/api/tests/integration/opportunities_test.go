@@ -17,8 +17,9 @@ import (
 )
 
 func TestOpportunitiesListAndDetail(t *testing.T) {
-	router, _ := setupTestRouterWithPool(t)
+	router, pool := setupTestRouterWithPool(t)
 	token := registerAndGetToken(t, router)
+	insertVerifiedBrowsableOpportunity(t, pool)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
@@ -95,10 +96,13 @@ func TestOpportunitiesListAndDetail(t *testing.T) {
 }
 
 func TestOpportunitiesHidesUnverifiedSeedByDefault(t *testing.T) {
-	router, _ := setupTestRouterWithPool(t)
+	router, pool := setupTestRouterWithPool(t)
 	token := registerAndGetToken(t, router)
+	marker := fmt.Sprintf("HideUnverified-%s", uuid.NewString()[:8])
+	verifiedID := insertVerifiedOpportunityWithTitle(t, pool, marker+" Verified Role")
+	unverifiedID := insertUnverifiedOpportunityWithTitle(t, pool, marker+" Unverified Role")
 
-	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?include_unverified=true", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?q="+marker+"&per_page=100", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -107,19 +111,76 @@ func TestOpportunitiesHidesUnverifiedSeedByDefault(t *testing.T) {
 		t.Fatalf("expected 200, got %d", rec.Code)
 	}
 
+	var defaultResp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(rec.Body).Decode(&defaultResp); err != nil {
+		t.Fatalf("decode default list: %v", err)
+	}
+	defaultIDs := map[string]bool{}
+	for _, item := range defaultResp.Data {
+		if id, _ := item["id"].(string); id != "" {
+			defaultIDs[id] = true
+		}
+	}
+	if !defaultIDs[verifiedID] {
+		t.Fatal("expected verified opportunity in default browse")
+	}
+	if defaultIDs[unverifiedID] {
+		t.Fatal("expected unverified opportunity hidden from default browse")
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?include_unverified=true&q="+marker+"&per_page=100", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec = httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", rec.Code)
+	}
+
 	var resp platform.PaginatedResponse[map[string]any]
 	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
+		t.Fatalf("decode include_unverified list: %v", err)
 	}
-	if resp.Pagination.Total < 10 {
-		t.Errorf("expected seed opportunities with include_unverified, got total %d", resp.Pagination.Total)
+	includeIDs := map[string]bool{}
+	for _, item := range resp.Data {
+		if id, _ := item["id"].(string); id != "" {
+			includeIDs[id] = true
+		}
 	}
+	if !includeIDs[verifiedID] || !includeIDs[unverifiedID] {
+		t.Fatalf("expected both verified and unverified opportunities with include_unverified, got %v", includeIDs)
+	}
+}
+
+func insertUnverifiedOpportunityWithTitle(t *testing.T, pool *pgxpool.Pool, title string) string {
+	t.Helper()
+	return insertOpportunity(t, pool, title, "unverified")
+}
+
+func insertVerifiedOpportunityWithTitle(t *testing.T, pool *pgxpool.Pool, title string) string {
+	t.Helper()
+	return insertOpportunity(t, pool, title, "verified")
+}
+
+func insertUnverifiedOpportunity(t *testing.T, pool *pgxpool.Pool) string {
+	t.Helper()
+	return insertUnverifiedOpportunityWithTitle(t, pool, "Unverified Internship")
+}
+
+func insertVerifiedBrowsableOpportunity(t *testing.T, pool *pgxpool.Pool) string {
+	t.Helper()
+	return insertOpportunityWithExternalPrefix(t, pool, "Software Engineer Intern", "verified", "INTEGRATION-LIST")
 }
 
 func insertVerifiedOpportunity(t *testing.T, pool *pgxpool.Pool) string {
 	t.Helper()
+	return insertOpportunityWithExternalPrefix(t, pool, "Software Engineer Intern", "verified", "API-TEST")
+}
+
+func insertOpportunityWithExternalPrefix(t *testing.T, pool *pgxpool.Pool, title, verificationStatus, externalPrefix string) string {
+	t.Helper()
 	id := uuid.New()
-	externalID := fmt.Sprintf("API-TEST-%s", uuid.NewString())
+	externalID := fmt.Sprintf("%s-%s", externalPrefix, uuid.NewString())
 	now := time.Now().UTC()
 	sourceID := "c3000000-0000-4000-8000-000000000001"
 	_, err := pool.Exec(context.Background(), `
@@ -130,19 +191,24 @@ func insertVerifiedOpportunity(t *testing.T, pool *pgxpool.Pool) string {
 			status, skills, tags, missed_sync_count,
 			experience_level, career_family, education_level, relevance_tier, classification_reasons
 		) VALUES (
-			$1, $2, $3, 'Software Engineer Intern', 'Test Agency', 'Verified test opportunity.',
+			$1, $2, $3, $4, 'Test Agency', 'Test opportunity.',
 			'internship', 'remote', 'https://www.usajobs.gov/test', 'https://www.usajobs.gov/test', 'USAJobs',
-			'verified', $4, $4, $4, 'open', '{}', '{integration}', 0,
+			$5, $6, $6, $6, 'open', '{}', '{integration}', 0,
 			'internship', 'software_engineering', 'unspecified', 'high_confidence_technical', '{internship,software_engineering}'
 		)
-	`, id, sourceID, externalID, now)
+	`, id, sourceID, externalID, title, verificationStatus, now)
 	if err != nil {
-		t.Fatalf("insert verified opportunity: %v", err)
+		t.Fatalf("insert %s opportunity: %v", verificationStatus, err)
 	}
 	t.Cleanup(func() {
 		_, _ = pool.Exec(context.Background(), `DELETE FROM opportunities WHERE id = $1`, id)
 	})
 	return id.String()
+}
+
+func insertOpportunity(t *testing.T, pool *pgxpool.Pool, title, verificationStatus string) string {
+	t.Helper()
+	return insertOpportunityWithExternalPrefix(t, pool, title, verificationStatus, "INTEGRATION-BROWSE")
 }
 
 func TestOpportunitiesNotFound(t *testing.T) {
@@ -174,7 +240,7 @@ func TestOpportunitiesUnauthorized(t *testing.T) {
 func TestOpportunitiesPagination(t *testing.T) {
 	router, pool := setupTestRouterWithPool(t)
 	token := registerAndGetToken(t, router)
-	insertVerifiedOpportunity(t, pool)
+	insertVerifiedBrowsableOpportunity(t, pool)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?per_page=1&page=1", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
