@@ -1,0 +1,24 @@
+{
+  "jobs": [
+    {
+      "id": 8031833,
+      "title": "Software Engineer, Intern",
+      "updated_at": "2026-01-15T10:00:00.000Z",
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=8031833",
+      "content": "<p>Build payments infrastructure as a summer intern.</p>",
+      "location": { "name": "San Francisco, CA" },
+      "departments": [{ "name": "Engineering" }],
+      "metadata": []
+    },
+    {
+      "id": 900001,
+      "title": "Senior Software Engineer",
+      "updated_at": "2026-01-10T10:00:00.000Z",
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=900001",
+      "content": "<p>Staff-level role.</p>",
+      "location": { "name": "Remote" },
+      "departments": [{ "name": "Engineering" }],
+      "metadata": []
+    }
+  ]
+}

@@ -1,0 +1,1190 @@
+{
+  "summary": {
+    "total": 127,
+    "supported": 56,
+    "unsupported": 66,
+    "research_needed": 5,
+    "classified": 122,
+    "coverage_pct": 45.9,
+    "ats_families": {
+      "icims": 1,
+      "workday": 13,
+      "phenom": 3,
+      "greenhouse": 37,
+      "custom": 35,
+      "eightfold": 6,
+      "ashby": 11,
+      "workable": 3,
+      "oracle": 2,
+      "usajobs": 2,
+      "successfactors": 2,
+      "lever": 6,
+      "taleo": 1
+    },
+    "unsupported_families": {
+      "icims": 1,
+      "workday": 13,
+      "phenom": 3,
+      "custom": 35,
+      "eightfold": 6,
+      "workable": 3,
+      "oracle": 2,
+      "successfactors": 2,
+      "taleo": 1
+    },
+    "research_needed_employers": [
+      "Atlassian",
+      "HashiCorp",
+      "PwC",
+      "Retool",
+      "Uber"
+    ]
+  },
+  "results": [
+    {
+      "employer": "AMD",
+      "sector": "technology",
+      "ats_family": "icims",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.amd.com/",
+      "evidence_url": "https://careers.amd.com/careers-home/jobs",
+      "evidence": "HTML/redirect marker for icims (HTTP 200, final https://careers.amd.com/careers-home/jobs)"
+    },
+    {
+      "employer": "Accenture",
+      "sector": "consulting",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.accenture.com/us-en/careers",
+      "evidence_url": "https://www.accenture.com/us-en/careers",
+      "evidence": "Workday host in final URL or page: https://www.accenture.com/us-en/careers"
+    },
+    {
+      "employer": "Adobe",
+      "sector": "technology",
+      "ats_family": "phenom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.adobe.com/",
+      "evidence_url": "https://careers.adobe.com/us/en",
+      "evidence": "HTML/redirect marker for phenom (HTTP 200, final https://careers.adobe.com/us/en)"
+    },
+    {
+      "employer": "Affirm",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.affirm.com/careers",
+      "evidence_url": "https://www.affirm.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'affirm'"
+    },
+    {
+      "employer": "Airbnb",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.airbnb.com/",
+      "evidence_url": "https://careers.airbnb.com/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'airbnb'"
+    },
+    {
+      "employer": "Amazon",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.amazon.jobs/",
+      "evidence_url": "https://www.amazon.jobs/en/",
+      "evidence": "Amazon-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "American Express",
+      "sector": "finance",
+      "ats_family": "eightfold",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://aexp.eightfold.ai/careers",
+      "evidence_url": "https://aexp.eightfold.ai/careers",
+      "evidence": "HTML/redirect marker for eightfold (HTTP 404, final https://aexp.eightfold.ai/careers)"
+    },
+    {
+      "employer": "Amplitude",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://amplitude.com/careers",
+      "evidence_url": "https://amplitude.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'amplitude'"
+    },
+    {
+      "employer": "Anduril",
+      "sector": "defense",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.anduril.com/careers/",
+      "evidence_url": "https://www.anduril.com/careers",
+      "evidence": "HTML/redirect marker for greenhouse (HTTP 200, final https://www.anduril.com/careers)"
+    },
+    {
+      "employer": "Anthropic",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.anthropic.com/careers",
+      "evidence_url": "https://www.anthropic.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'anthropic'"
+    },
+    {
+      "employer": "Apple",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.apple.com/careers/us/",
+      "evidence_url": "https://www.apple.com/careers/us/",
+      "evidence": "Apple-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Asana",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://asana.com/jobs",
+      "evidence_url": "https://asana.com/jobs",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'asana'"
+    },
+    {
+      "employer": "Atlassian",
+      "sector": "technology",
+      "ats_family": "unknown",
+      "careeros_status": "RESEARCH NEEDED",
+      "careers_url": "https://www.atlassian.com/company/careers",
+      "evidence_url": "https://www.atlassian.com/company/careers",
+      "evidence": "No confident ATS marker (HTTP 200, final https://www.atlassian.com/company/careers)"
+    },
+    {
+      "employer": "BCG",
+      "sector": "consulting",
+      "ats_family": "eightfold",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.bcg.com/",
+      "evidence_url": "https://careers.bcg.com/global/en/",
+      "evidence": "HTML/redirect marker for eightfold (HTTP 200, final https://careers.bcg.com/global/en/)"
+    },
+    {
+      "employer": "Bain & Company",
+      "sector": "consulting",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.bain.com/careers/",
+      "evidence_url": "https://www.bain.com/careers/",
+      "evidence": "Bain-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Bank of America",
+      "sector": "finance",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.bankofamerica.com/",
+      "evidence_url": "https://careers.bankofamerica.com/en-us",
+      "evidence": "Workday host in final URL or page: https://careers.bankofamerica.com/en-us"
+    },
+    {
+      "employer": "Benchling",
+      "sector": "healthtech",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.benchling.com/careers/",
+      "evidence_url": "https://www.benchling.com/careers/",
+      "evidence": "Public ashby API HTTP 200 for board token 'benchling'"
+    },
+    {
+      "employer": "Block",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://block.xyz/careers",
+      "evidence_url": "https://block.xyz/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'block'"
+    },
+    {
+      "employer": "Boeing",
+      "sector": "defense",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.boeing.com/",
+      "evidence_url": "https://jobs.boeing.com/",
+      "evidence": "Workday host in final URL or page: https://jobs.boeing.com/"
+    },
+    {
+      "employer": "Brex",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.brex.com/careers",
+      "evidence_url": "https://www.brex.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'brex'"
+    },
+    {
+      "employer": "Bridgewater Associates",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.bridgewater.com/working-at-bridgewater",
+      "evidence_url": "https://www.bridgewater.com/working-at-bridgewater",
+      "evidence": "Bridgewater-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Broadcom",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.broadcom.com/company/careers",
+      "evidence_url": "https://www.broadcom.com/company/careers",
+      "evidence": "Broadcom-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Canva",
+      "sector": "technology",
+      "ats_family": "workable",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.canva.com/careers/",
+      "evidence_url": "https://www.canva.com/careers/",
+      "evidence": "apply.workable.com/canva/ HTTP 200"
+    },
+    {
+      "employer": "Capgemini",
+      "sector": "consulting",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.capgemini.com/careers/",
+      "evidence_url": "https://www.capgemini.com/careers/",
+      "evidence": "Capgemini-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Capital One",
+      "sector": "finance",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.capitalonecareers.com/",
+      "evidence_url": "https://www.capitalonecareers.com/",
+      "evidence": "Workday host in final URL or page: https://www.capitalonecareers.com/"
+    },
+    {
+      "employer": "Chime",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.chime.com/careers/",
+      "evidence_url": "https://www.chime.com/careers/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'chime'"
+    },
+    {
+      "employer": "Cisco",
+      "sector": "technology",
+      "ats_family": "phenom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.cisco.com/",
+      "evidence_url": "https://careers.cisco.com/global/en",
+      "evidence": "HTML/redirect marker for phenom (HTTP 200, final https://careers.cisco.com/global/en)"
+    },
+    {
+      "employer": "Citadel",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.citadel.com/careers/",
+      "evidence_url": "https://www.citadel.com/careers/",
+      "evidence": "Citadel-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "Citigroup",
+      "sector": "finance",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.citi.com/",
+      "evidence_url": "https://jobs.citi.com/",
+      "evidence": "Workday host in final URL or page: https://jobs.citi.com/"
+    },
+    {
+      "employer": "Cloudflare",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.cloudflare.com/careers/",
+      "evidence_url": "https://www.cloudflare.com/careers/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'cloudflare'"
+    },
+    {
+      "employer": "Cohere",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://cohere.com/careers",
+      "evidence_url": "https://cohere.com/careers",
+      "evidence": "Public ashby API HTTP 200 for board token 'cohere'"
+    },
+    {
+      "employer": "Coinbase",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.coinbase.com/careers",
+      "evidence_url": "https://www.coinbase.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'coinbase'"
+    },
+    {
+      "employer": "Confluent",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.confluent.io/",
+      "evidence_url": "https://careers.confluent.io/",
+      "evidence": "Public ashby API HTTP 200 for board token 'confluent'"
+    },
+    {
+      "employer": "CrowdStrike",
+      "sector": "cybersecurity",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.crowdstrike.com/careers/",
+      "evidence_url": "https://www.crowdstrike.com/en-us/careers/",
+      "evidence": "Workday host in final URL or page: https://www.crowdstrike.com/en-us/careers/"
+    },
+    {
+      "employer": "DE Shaw",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.deshaw.com/careers",
+      "evidence_url": "https://www.deshaw.com/careers",
+      "evidence": "DE Shaw-owned careers site (HTTP 200)"
+    },
+    {
+      "employer": "Databricks",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.databricks.com/company/careers",
+      "evidence_url": "https://www.databricks.com/company/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'databricks'"
+    },
+    {
+      "employer": "Datadog",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.datadoghq.com/",
+      "evidence_url": "https://careers.datadoghq.com/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'datadog'"
+    },
+    {
+      "employer": "Deel",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.deel.com/careers/",
+      "evidence_url": "https://www.deel.com/careers/",
+      "evidence": "Public ashby API HTTP 200 for board token 'deel'"
+    },
+    {
+      "employer": "Dell Technologies",
+      "sector": "technology",
+      "ats_family": "oracle",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.dell.com/",
+      "evidence_url": "https://jobs.dell.com/",
+      "evidence": "Final URL enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers (Oracle Recruiting)"
+    },
+    {
+      "employer": "Deloitte",
+      "sector": "consulting",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://apply.deloitte.com/",
+      "evidence_url": "https://apply.deloitte.com/en_US/careers",
+      "evidence": "Deloitte-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Discord",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://discord.com/careers",
+      "evidence_url": "https://discord.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'discord'"
+    },
+    {
+      "employer": "DoD (federal via USAJobs)",
+      "sector": "federal",
+      "ats_family": "usajobs",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.usajobs.gov/Search/?k=Department+of+Defense",
+      "evidence_url": "https://www.usajobs.gov/Search/?k=Department+of+Defense",
+      "evidence": "Federal postings on USAJobs.gov; CareerOS USAJobs adapter"
+    },
+    {
+      "employer": "DoorDash",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careersatdoordash.com/",
+      "evidence_url": "https://careersatdoordash.com/",
+      "evidence": "boards-api.greenhouse.io/v1/boards/doordashusa/jobs HTTP 200"
+    },
+    {
+      "employer": "Dropbox",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.dropbox.com/jobs",
+      "evidence_url": "https://www.dropbox.com/jobs",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'dropbox'"
+    },
+    {
+      "employer": "EY",
+      "sector": "consulting",
+      "ats_family": "successfactors",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.ey.com/",
+      "evidence_url": "https://careers.ey.com/",
+      "evidence": "HTML/redirect marker for successfactors (HTTP 200, final https://careers.ey.com/)"
+    },
+    {
+      "employer": "Elastic",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.elastic.co/careers",
+      "evidence_url": "https://www.elastic.co/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'elastic'"
+    },
+    {
+      "employer": "Epic",
+      "sector": "healthtech",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.epic.com/",
+      "evidence_url": "https://careers.epic.com/",
+      "evidence": "Epic-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Figma",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.figma.com/careers/",
+      "evidence_url": "https://www.figma.com/careers/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'figma'"
+    },
+    {
+      "employer": "General Dynamics",
+      "sector": "defense",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.gd.com/careers",
+      "evidence_url": "https://www.gd.com/careers",
+      "evidence": "General Dynamics-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "GitLab",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://about.gitlab.com/jobs/",
+      "evidence_url": "https://about.gitlab.com/jobs/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'gitlab'"
+    },
+    {
+      "employer": "Goldman Sachs",
+      "sector": "finance",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.goldmansachs.com/careers/",
+      "evidence_url": "https://www.goldmansachs.com/careers/",
+      "evidence": "Goldman Sachs-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Google",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.google.com/about/careers/",
+      "evidence_url": "https://www.google.com/about/careers/applications/",
+      "evidence": "Google-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Gopuff",
+      "sector": "technology",
+      "ats_family": "lever",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.gopuff.com/careers",
+      "evidence_url": "https://www.gopuff.com/careers",
+      "evidence": "Public lever API HTTP 200 for board token 'gopuff'"
+    },
+    {
+      "employer": "Grammarly",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.grammarly.com/careers",
+      "evidence_url": "https://superhuman.com/company/careers",
+      "evidence": "HTML/redirect marker for greenhouse (HTTP 200, final https://superhuman.com/company/careers)"
+    },
+    {
+      "employer": "HP Inc",
+      "sector": "technology",
+      "ats_family": "eightfold",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.hp.com/",
+      "evidence_url": "https://jobs.hp.com/",
+      "evidence": "HTML/redirect marker for eightfold (HTTP 200, final https://jobs.hp.com/)"
+    },
+    {
+      "employer": "HashiCorp",
+      "sector": "technology",
+      "ats_family": "unknown",
+      "careeros_status": "RESEARCH NEEDED",
+      "careers_url": "https://www.hashicorp.com/careers",
+      "evidence_url": "https://www.hashicorp.com/careers",
+      "evidence": "No confident ATS marker (HTTP 429, final https://www.hashicorp.com/careers)"
+    },
+    {
+      "employer": "HubSpot",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.hubspot.com/careers",
+      "evidence_url": "https://www.hubspot.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'hubspot'"
+    },
+    {
+      "employer": "IBM",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.ibm.com/careers",
+      "evidence_url": "https://www.ibm.com/careers",
+      "evidence": "IBM-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "IMC Trading",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.imc.com/us/careers/",
+      "evidence_url": "https://www.imc.com/us/careers/",
+      "evidence": "IMC-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Instacart",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://instacart.careers/",
+      "evidence_url": "https://instacart.careers/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'instacart'"
+    },
+    {
+      "employer": "Intel",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.intel.com/",
+      "evidence_url": "https://corpredirect.intel.com/Redirector/404Redirector.aspx?404;https://jobs.intel.com/",
+      "evidence": "Intel-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "Intercom",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.intercom.com/careers",
+      "evidence_url": "https://www.intercom.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'intercom'"
+    },
+    {
+      "employer": "JPMorgan Chase",
+      "sector": "finance",
+      "ats_family": "oracle",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.jpmorgan.com/",
+      "evidence_url": "https://www.jpmorganchase.com/careers?redirect=careers_jpm",
+      "evidence": "HTML/redirect marker for oracle (HTTP 200, final https://www.jpmorganchase.com/careers?redirect=careers_jpm)"
+    },
+    {
+      "employer": "Jane Street",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.janestreet.com/join-jane-street/",
+      "evidence_url": "https://www.janestreet.com/join-jane-street/overview/",
+      "evidence": "Jane Street-owned recruiting site (HTTP 200)"
+    },
+    {
+      "employer": "KPMG",
+      "sector": "consulting",
+      "ats_family": "lever",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://jobs.lever.co/kpmg",
+      "evidence_url": "https://jobs.lever.co/kpmg",
+      "evidence": "Lever board page HTTP 200; api.lever.co/v0/postings/kpmg HTTP 200"
+    },
+    {
+      "employer": "L3Harris",
+      "sector": "defense",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.l3harris.com/",
+      "evidence_url": "https://careers.l3harris.com/en",
+      "evidence": "L3Harris-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Linear",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://linear.app/careers",
+      "evidence_url": "https://linear.app/careers",
+      "evidence": "Public ashby API HTTP 200 for board token 'linear'"
+    },
+    {
+      "employer": "Lockheed Martin",
+      "sector": "defense",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.lockheedmartinjobs.com/",
+      "evidence_url": "https://www.lockheedmartinjobs.com/cgi-bin/ext_redir.pl",
+      "evidence": "Lockheed Martin-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Lyft",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.lyft.com/careers",
+      "evidence_url": "https://www.lyft.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'lyft'"
+    },
+    {
+      "employer": "Mastercard",
+      "sector": "finance",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.mastercard.com/",
+      "evidence_url": "https://careers.mastercard.com/us/en",
+      "evidence": "Workday host in final URL or page: https://careers.mastercard.com/us/en"
+    },
+    {
+      "employer": "McKinsey & Company",
+      "sector": "consulting",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.mckinsey.com/careers",
+      "evidence_url": "https://www.mckinsey.com/careers",
+      "evidence": "McKinsey-owned careers platform (HTTP 000)"
+    },
+    {
+      "employer": "Meta",
+      "sector": "technology",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.metacareers.com/",
+      "evidence_url": "https://www.metacareers.com/",
+      "evidence": "Workday host in final URL or page: https://www.metacareers.com/"
+    },
+    {
+      "employer": "Microsoft",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.microsoft.com/",
+      "evidence_url": "https://careers.microsoft.com/v2/global/en/home.html",
+      "evidence": "Microsoft-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Monday.com",
+      "sector": "technology",
+      "ats_family": "workable",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://monday.com/careers",
+      "evidence_url": "https://monday.com/careers",
+      "evidence": "apply.workable.com/monday/ HTTP 200; widget API returns account monday"
+    },
+    {
+      "employer": "MongoDB",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.mongodb.com/careers",
+      "evidence_url": "https://www.mongodb.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'mongodb'"
+    },
+    {
+      "employer": "Morgan Stanley",
+      "sector": "finance",
+      "ats_family": "eightfold",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://morganstanley.eightfold.ai/careers",
+      "evidence_url": "https://morganstanley.eightfold.ai/careers",
+      "evidence": "HTML/redirect marker for eightfold (HTTP 200, final https://morganstanley.eightfold.ai/careers)"
+    },
+    {
+      "employer": "NASA (federal via USAJobs)",
+      "sector": "federal",
+      "ats_family": "usajobs",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.usajobs.gov/Search/?k=NASA",
+      "evidence_url": "https://www.usajobs.gov/Search/?k=NASA",
+      "evidence": "Federal postings on USAJobs.gov; CareerOS USAJobs adapter"
+    },
+    {
+      "employer": "NVIDIA",
+      "sector": "technology",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
+      "evidence_url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
+      "evidence": "Workday host in final URL or page: https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"
+    },
+    {
+      "employer": "Netflix",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.netflix.com/",
+      "evidence_url": "https://jobs.netflix.com/",
+      "evidence": "Netflix-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Northrop Grumman",
+      "sector": "defense",
+      "ats_family": "eightfold",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.northropgrumman.com/jobs/",
+      "evidence_url": "https://jobs.northropgrumman.com/careers",
+      "evidence": "HTML/redirect marker for eightfold (HTTP 200, final https://jobs.northropgrumman.com/careers)"
+    },
+    {
+      "employer": "Notion",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.notion.so/careers",
+      "evidence_url": "https://www.notion.so/careers",
+      "evidence": "Public ashby API HTTP 200 for board token 'notion'"
+    },
+    {
+      "employer": "Okta",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.okta.com/company/careers/",
+      "evidence_url": "https://www.okta.com/company/careers/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'okta'"
+    },
+    {
+      "employer": "OpenAI",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://openai.com/careers",
+      "evidence_url": "https://openai.com/careers",
+      "evidence": "Public ashby API HTTP 200 for board token 'openai'"
+    },
+    {
+      "employer": "Optiver",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://optiver.com/working-at-optiver/careers/",
+      "evidence_url": "https://www.optiver.com/join-us/careers/",
+      "evidence": "Optiver-owned careers platform (HTTP 404)"
+    },
+    {
+      "employer": "Oracle",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.oracle.com/",
+      "evidence_url": "https://careers.oracle.com/en/sites/jobsearch",
+      "evidence": "Oracle-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Palantir",
+      "sector": "technology",
+      "ats_family": "lever",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.palantir.com/careers/",
+      "evidence_url": "https://www.palantir.com/careers/",
+      "evidence": "Public lever API HTTP 200 for board token 'palantir'"
+    },
+    {
+      "employer": "Palo Alto Networks",
+      "sector": "cybersecurity",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.paloaltonetworks.com/",
+      "evidence_url": "https://jobs.paloaltonetworks.com/en",
+      "evidence": "Workday host in final URL or page: https://jobs.paloaltonetworks.com/en"
+    },
+    {
+      "employer": "PayPal",
+      "sector": "fintech",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.pypl.com/",
+      "evidence_url": "https://careers.pypl.com/",
+      "evidence": "PayPal-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "Pinterest",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.pinterestcareers.com/",
+      "evidence_url": "https://www.pinterestcareers.com/",
+      "evidence": "Pinterest-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "Plaid",
+      "sector": "fintech",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://plaid.com/careers/",
+      "evidence_url": "https://plaid.com/careers/",
+      "evidence": "Public ashby API HTTP 200 for board token 'plaid'"
+    },
+    {
+      "employer": "Postman",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.postman.com/company/careers/",
+      "evidence_url": "https://www.postman.com/company/careers/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'postman'"
+    },
+    {
+      "employer": "PwC",
+      "sector": "consulting",
+      "ats_family": "unknown",
+      "careeros_status": "RESEARCH NEEDED",
+      "careers_url": "https://www.pwc.com/us/en/careers.html",
+      "evidence_url": "https://www.pwc.com/us/en/careers.html",
+      "evidence": "No confident ATS marker (HTTP 200, final https://www.pwc.com/us/en/careers.html)"
+    },
+    {
+      "employer": "Qualcomm",
+      "sector": "technology",
+      "ats_family": "eightfold",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.qualcomm.com/",
+      "evidence_url": "https://careers.qualcomm.com/careers",
+      "evidence": "HTML/redirect marker for eightfold (HTTP 200, final https://careers.qualcomm.com/careers)"
+    },
+    {
+      "employer": "RTX",
+      "sector": "defense",
+      "ats_family": "phenom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.rtx.com/",
+      "evidence_url": "https://careers.rtx.com/global/en",
+      "evidence": "HTML/redirect marker for phenom (HTTP 200, final https://careers.rtx.com/global/en)"
+    },
+    {
+      "employer": "Ramp",
+      "sector": "fintech",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://ramp.com/careers",
+      "evidence_url": "https://ramp.com/careers",
+      "evidence": "Public ashby API HTTP 200 for board token 'ramp'"
+    },
+    {
+      "employer": "Reddit",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.redditinc.com/careers",
+      "evidence_url": "https://www.redditinc.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'reddit'"
+    },
+    {
+      "employer": "Retool",
+      "sector": "technology",
+      "ats_family": "unknown",
+      "careeros_status": "RESEARCH NEEDED",
+      "careers_url": "https://retool.com/careers",
+      "evidence_url": "https://retool.com/careers",
+      "evidence": "No confident ATS marker (HTTP 200, final https://retool.com/careers)"
+    },
+    {
+      "employer": "Robinhood",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.robinhood.com/",
+      "evidence_url": "https://careers.robinhood.com/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'robinhood'"
+    },
+    {
+      "employer": "Roblox",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.roblox.com/",
+      "evidence_url": "https://careers.roblox.com/",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'roblox'"
+    },
+    {
+      "employer": "SAP",
+      "sector": "enterprise",
+      "ats_family": "successfactors",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://jobs.sap.com/",
+      "evidence_url": "https://jobs.sap.com/",
+      "evidence": "HTML/redirect marker for successfactors (HTTP 200, final https://jobs.sap.com/)"
+    },
+    {
+      "employer": "Salesforce",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.salesforce.com/",
+      "evidence_url": "https://www.salesforce.com/company/careers/?bc=OTH",
+      "evidence": "Salesforce-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Scale AI",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://scale.com/careers",
+      "evidence_url": "https://scale.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'scaleai'"
+    },
+    {
+      "employer": "SentinelOne",
+      "sector": "cybersecurity",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.sentinelone.com/careers/",
+      "evidence_url": "https://www.sentinelone.com/careers/",
+      "evidence": "boards-api.greenhouse.io/v1/boards/sentinellabs/jobs HTTP 200"
+    },
+    {
+      "employer": "Sentry",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://sentry.io/careers/",
+      "evidence_url": "https://sentry.io/careers/",
+      "evidence": "Public ashby API HTTP 200 for board token 'sentry'"
+    },
+    {
+      "employer": "ServiceNow",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.servicenow.com/",
+      "evidence_url": "https://careers.servicenow.com/",
+      "evidence": "ServiceNow-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "Shield AI",
+      "sector": "defense",
+      "ats_family": "lever",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://shield.ai/careers/",
+      "evidence_url": "https://shield.ai/careers/",
+      "evidence": "Public lever API HTTP 200 for board token 'shieldai'"
+    },
+    {
+      "employer": "Shopify",
+      "sector": "technology",
+      "ats_family": "workable",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.shopify.com/careers",
+      "evidence_url": "https://www.shopify.com/careers",
+      "evidence": "apply.workable.com/shopify/ HTTP 200"
+    },
+    {
+      "employer": "Snap",
+      "sector": "technology",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.snap.com/",
+      "evidence_url": "https://careers.snap.com/",
+      "evidence": "Job links use wd1.myworkdaysite.com/recruiting/snapchat/snap/..."
+    },
+    {
+      "employer": "Snowflake",
+      "sector": "technology",
+      "ats_family": "ashby",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.snowflake.com/",
+      "evidence_url": "https://careers.snowflake.com/",
+      "evidence": "Public ashby API HTTP 200 for board token 'snowflake'"
+    },
+    {
+      "employer": "SoFi",
+      "sector": "fintech",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.sofi.com/careers/",
+      "evidence_url": "https://www.sofi.com/careers/",
+      "evidence": "SoFi-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "SpaceX",
+      "sector": "aerospace",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.spacex.com/careers/",
+      "evidence_url": "https://www.spacex.com/careers/",
+      "evidence": "SpaceX-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Spotify",
+      "sector": "technology",
+      "ats_family": "lever",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.lifeatspotify.com/jobs",
+      "evidence_url": "https://www.lifeatspotify.com/jobs",
+      "evidence": "Public lever API HTTP 200 for board token 'spotify'"
+    },
+    {
+      "employer": "Stripe",
+      "sector": "fintech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://stripe.com/jobs",
+      "evidence_url": "https://stripe.com/jobs",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'stripe'"
+    },
+    {
+      "employer": "Target",
+      "sector": "technology",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://corporate.target.com/careers",
+      "evidence_url": "https://corporate.target.com/careers",
+      "evidence": "Workday host in final URL or page: https://corporate.target.com/careers"
+    },
+    {
+      "employer": "Tempus",
+      "sector": "healthtech",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.tempus.com/careers/",
+      "evidence_url": "https://www.tempus.com/careers/",
+      "evidence": "Careers redirect to job-boards.greenhouse.io/tempus (new GH host); legacy boards-api token returned 404 during audit"
+    },
+    {
+      "employer": "Tesla",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.tesla.com/careers",
+      "evidence_url": "https://www.tesla.com/careers",
+      "evidence": "Tesla-owned careers platform (HTTP 403)"
+    },
+    {
+      "employer": "Twilio",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.twilio.com/company/jobs",
+      "evidence_url": "https://www.twilio.com/company/jobs",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'twilio'"
+    },
+    {
+      "employer": "Two Sigma",
+      "sector": "quant",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.twosigma.com/",
+      "evidence_url": "https://careers.twosigma.com/",
+      "evidence": "Two Sigma-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Uber",
+      "sector": "technology",
+      "ats_family": "unknown",
+      "careeros_status": "RESEARCH NEEDED",
+      "careers_url": "https://www.uber.com/us/en/careers/",
+      "evidence_url": "https://www.uber.com/us/en/careers/",
+      "evidence": "No confident ATS marker (HTTP 406, final https://www.uber.com/us/en/careers/)"
+    },
+    {
+      "employer": "UnitedHealth Group",
+      "sector": "healthtech",
+      "ats_family": "taleo",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.unitedhealthgroup.com/",
+      "evidence_url": "https://careers.unitedhealthgroup.com/search-jobs",
+      "evidence": "HTML/redirect marker for taleo (HTTP 200, final https://careers.unitedhealthgroup.com/search-jobs)"
+    },
+    {
+      "employer": "Veeva Systems",
+      "sector": "healthtech",
+      "ats_family": "lever",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://careers.veeva.com/",
+      "evidence_url": "https://careers.veeva.com/",
+      "evidence": "api.lever.co/v0/postings/veeva HTTP 200 with job payloads"
+    },
+    {
+      "employer": "Vercel",
+      "sector": "technology",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://vercel.com/careers",
+      "evidence_url": "https://vercel.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'vercel'"
+    },
+    {
+      "employer": "Visa",
+      "sector": "finance",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.visa.com/",
+      "evidence_url": "https://careers.visa.com/",
+      "evidence": "Visa-owned careers platform (HTTP 000)"
+    },
+    {
+      "employer": "Walmart Global Tech",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.walmart.com/",
+      "evidence_url": "https://careers.walmart.com/us/en/home",
+      "evidence": "Walmart-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Zendesk",
+      "sector": "technology",
+      "ats_family": "workday",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://www.zendesk.com/company/careers/",
+      "evidence_url": "https://www.zendesk.com/company/careers/",
+      "evidence": "Workday host in final URL or page: https://www.zendesk.com/company/careers/"
+    },
+    {
+      "employer": "Zoom",
+      "sector": "technology",
+      "ats_family": "custom",
+      "careeros_status": "UNSUPPORTED",
+      "careers_url": "https://careers.zoom.us/",
+      "evidence_url": "https://careers.zoom.us/",
+      "evidence": "Zoom-owned careers platform (HTTP 200)"
+    },
+    {
+      "employer": "Zscaler",
+      "sector": "cybersecurity",
+      "ats_family": "greenhouse",
+      "careeros_status": "SUPPORTED",
+      "careers_url": "https://www.zscaler.com/careers",
+      "evidence_url": "https://www.zscaler.com/careers",
+      "evidence": "Public greenhouse API HTTP 200 for board token 'zscaler'"
+    }
+  ],
+  "audit_date": "2026-08-29",
+  "methodology": "API probes + redirect-following curl + HTML marker classification"
+}

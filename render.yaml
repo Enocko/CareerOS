@@ -1,0 +1,110 @@
+# CareerOS Render deployment blueprint
+# Apply via Render Dashboard → New → Blueprint, or `render blueprint sync`
+
+databases:
+  - name: careeros-db
+    plan: free
+    databaseName: careeros
+    user: careeros
+
+services:
+  - type: web
+    name: careeros-api
+    runtime: docker
+    dockerfilePath: ./infrastructure/docker/Dockerfile.api
+    dockerContext: .
+    plan: free
+    healthCheckPath: /ready
+    envVars:
+      - key: CAREEROS_ENV
+        value: production
+      - key: API_PORT
+        value: 8080
+      - key: DATABASE_URL
+        fromDatabase:
+          name: careeros-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRY_HOURS
+        value: 168
+      - key: CORS_ORIGIN
+        sync: false
+      - key: COOKIE_SECURE
+        value: true
+      - key: COOKIE_SAMESITE
+        value: None
+      - key: METRICS_ENABLED
+        value: false
+      - key: CAREEROS_ADMIN_EMAILS
+        sync: false
+      - key: USAJOBS_API_KEY
+        sync: false
+      - key: USAJOBS_USER_AGENT
+        sync: false
+      - key: LOG_LEVEL
+        value: info
+    buildCommand: ""
+    # Run migrations before first deploy: DATABASE_URL=... ./scripts/migrate.sh up
+
+  - type: worker
+    name: careeros-worker
+    runtime: docker
+    dockerfilePath: ./infrastructure/docker/Dockerfile.worker
+    dockerContext: .
+    plan: free
+    envVars:
+      - fromService:
+          name: careeros-api
+          type: web
+          envVarKey: DATABASE_URL
+      - key: LOG_LEVEL
+        value: info
+      - key: USAJOBS_API_KEY
+        fromService:
+          name: careeros-api
+          type: web
+          envVarKey: USAJOBS_API_KEY
+      - key: USAJOBS_USER_AGENT
+        fromService:
+          name: careeros-api
+          type: web
+          envVarKey: USAJOBS_USER_AGENT
+
+  - type: cron
+    name: careeros-scheduler
+    runtime: docker
+    dockerfilePath: ./infrastructure/docker/Dockerfile.scheduler
+    dockerContext: .
+    schedule: "0 */6 * * *"
+    plan: free
+    envVars:
+      - fromService:
+          name: careeros-api
+          type: web
+          envVarKey: DATABASE_URL
+      - key: LOG_LEVEL
+        value: info
+      - key: USAJOBS_API_KEY
+        fromService:
+          name: careeros-api
+          type: web
+          envVarKey: USAJOBS_API_KEY
+      - key: USAJOBS_USER_AGENT
+        fromService:
+          name: careeros-api
+          type: web
+          envVarKey: USAJOBS_USER_AGENT
+
+  - type: web
+    name: careeros-web
+    runtime: static
+    buildCommand: cd apps/web && npm ci && npm run build
+    staticPublishPath: apps/web/dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

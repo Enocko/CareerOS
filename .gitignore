@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Go
+apps/api/bin/
+apps/api/tmp/
+*.exe
+*.test
+coverage.out
+coverage.html
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Go build output
+apps/api/bin/
+
+# Frontend
+apps/web/node_modules/
+apps/web/dist/
+apps/web/npm-cache/
+
+# Docker volumes
+postgres_data/

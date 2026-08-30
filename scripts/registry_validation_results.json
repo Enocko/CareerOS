@@ -1,0 +1,71 @@
+[
+{"employer": "Affirm", "provider": "greenhouse", "token": "affirm", "careers_url": "https://www.affirm.com/careers", "tags": ["fintech"], "api_status": 200, "status": "verified", "reason": "", "job_count": 210, "source_url": "https://boards.greenhouse.io/affirm"}
+,
+{"employer": "Airbnb", "provider": "greenhouse", "token": "airbnb", "careers_url": "https://careers.airbnb.com/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 171, "source_url": "https://boards.greenhouse.io/airbnb"}
+,
+{"employer": "Amplitude", "provider": "greenhouse", "token": "amplitude", "careers_url": "https://amplitude.com/careers", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 37, "source_url": "https://boards.greenhouse.io/amplitude"}
+,
+{"employer": "Anthropic", "provider": "greenhouse", "token": "anthropic", "careers_url": "https://www.anthropic.com/careers", "tags": ["technology", "ai"], "api_status": 200, "status": "verified", "reason": "", "job_count": 571, "source_url": "https://boards.greenhouse.io/anthropic"}
+,
+{"employer": "Asana", "provider": "greenhouse", "token": "asana", "careers_url": "https://asana.com/jobs", "tags": ["technology", "product"], "api_status": 200, "status": "verified", "reason": "", "job_count": 123, "source_url": "https://boards.greenhouse.io/asana"}
+,
+{"employer": "Brex", "provider": "greenhouse", "token": "brex", "careers_url": "https://www.brex.com/careers", "tags": ["fintech"], "api_status": 200, "status": "verified", "reason": "", "job_count": 294, "source_url": "https://boards.greenhouse.io/brex"}
+,
+{"employer": "Chime", "provider": "greenhouse", "token": "chime", "careers_url": "https://www.chime.com/careers/", "tags": ["fintech"], "api_status": 200, "status": "verified", "reason": "", "job_count": 63, "source_url": "https://boards.greenhouse.io/chime"}
+,
+{"employer": "Databricks", "provider": "greenhouse", "token": "databricks", "careers_url": "https://www.databricks.com/company/careers", "tags": ["technology", "data"], "api_status": 200, "status": "verified", "reason": "", "job_count": 858, "source_url": "https://boards.greenhouse.io/databricks"}
+,
+{"employer": "Elastic", "provider": "greenhouse", "token": "elastic", "careers_url": "https://www.elastic.co/careers", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 336, "source_url": "https://boards.greenhouse.io/elastic"}
+,
+{"employer": "GitLab", "provider": "greenhouse", "token": "gitlab", "careers_url": "https://about.gitlab.com/jobs/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 220, "source_url": "https://boards.greenhouse.io/gitlab"}
+,
+{"employer": "HubSpot", "provider": "greenhouse", "token": "hubspot", "careers_url": "https://www.hubspot.com/careers", "tags": ["technology"], "api_status": 200, "status": "verification_failed", "reason": "API 200 but employer mismatch or empty", "job_count": 0, "source_url": "https://boards.greenhouse.io/hubspot"}
+,
+{"employer": "Instacart", "provider": "greenhouse", "token": "instacart", "careers_url": "https://instacart.careers/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 123, "source_url": "https://boards.greenhouse.io/instacart"}
+,
+{"employer": "Intercom", "provider": "greenhouse", "token": "intercom", "careers_url": "https://www.intercom.com/careers", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 120, "source_url": "https://boards.greenhouse.io/intercom"}
+,
+{"employer": "MongoDB", "provider": "greenhouse", "token": "mongodb", "careers_url": "https://www.mongodb.com/careers", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 407, "source_url": "https://boards.greenhouse.io/mongodb"}
+,
+{"employer": "Okta", "provider": "greenhouse", "token": "okta", "careers_url": "https://www.okta.com/company/careers/", "tags": ["technology", "cybersecurity"], "api_status": 200, "status": "verified", "reason": "", "job_count": 348, "source_url": "https://boards.greenhouse.io/okta"}
+,
+{"employer": "Postman", "provider": "greenhouse", "token": "postman", "careers_url": "https://www.postman.com/company/careers/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 63, "source_url": "https://boards.greenhouse.io/postman"}
+,
+{"employer": "Reddit", "provider": "greenhouse", "token": "reddit", "careers_url": "https://www.redditinc.com/careers", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 153, "source_url": "https://boards.greenhouse.io/reddit"}
+,
+{"employer": "Robinhood", "provider": "greenhouse", "token": "robinhood", "careers_url": "https://careers.robinhood.com/", "tags": ["fintech"], "api_status": 200, "status": "verified", "reason": "", "job_count": 129, "source_url": "https://boards.greenhouse.io/robinhood"}
+,
+{"employer": "Scale AI", "provider": "greenhouse", "token": "scaleai", "careers_url": "https://scale.com/careers", "tags": ["technology", "ai"], "api_status": 200, "status": "verified", "reason": "", "job_count": 219, "source_url": "https://boards.greenhouse.io/scaleai"}
+,
+{"employer": "Twilio", "provider": "greenhouse", "token": "twilio", "careers_url": "https://www.twilio.com/company/jobs", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 144, "source_url": "https://boards.greenhouse.io/twilio"}
+,
+{"employer": "Vercel", "provider": "greenhouse", "token": "vercel", "careers_url": "https://vercel.com/careers", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 91, "source_url": "https://boards.greenhouse.io/vercel"}
+,
+{"employer": "Zscaler", "provider": "greenhouse", "token": "zscaler", "careers_url": "https://www.zscaler.com/careers", "tags": ["cybersecurity"], "api_status": 200, "status": "verified", "reason": "", "job_count": 348, "source_url": "https://boards.greenhouse.io/zscaler"}
+,
+{"employer": "Anduril", "provider": "greenhouse", "token": "anduril", "careers_url": "https://www.anduril.com/careers/", "tags": ["defense", "technology"], "api_status": 404, "status": "verification_failed", "reason": "API HTTP 404", "job_count": 0, "source_url": "https://boards.greenhouse.io/anduril"}
+,
+{"employer": "DoorDash", "provider": "greenhouse", "token": "doordashusa", "careers_url": "https://careersatdoordash.com/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 468, "source_url": "https://boards.greenhouse.io/doordashusa"}
+,
+{"employer": "Grammarly", "provider": "greenhouse", "token": "grammarly", "careers_url": "https://www.grammarly.com/careers", "tags": ["technology"], "api_status": 404, "status": "verification_failed", "reason": "API HTTP 404", "job_count": 0, "source_url": "https://boards.greenhouse.io/grammarly"}
+,
+{"employer": "SentinelOne", "provider": "greenhouse", "token": "sentinellabs", "careers_url": "https://www.sentinelone.com/careers/", "tags": ["cybersecurity"], "api_status": 200, "status": "verified", "reason": "", "job_count": 226, "source_url": "https://boards.greenhouse.io/sentinellabs"}
+,
+{"employer": "Tempus", "provider": "greenhouse", "token": "tempus", "careers_url": "https://www.tempus.com/careers/", "tags": ["healthtech"], "api_status": 404, "status": "verification_failed", "reason": "API HTTP 404", "job_count": 0, "source_url": "https://boards.greenhouse.io/tempus"}
+,
+{"employer": "Benchling", "provider": "ashby", "token": "benchling", "careers_url": "https://www.benchling.com/careers/", "tags": ["healthtech"], "api_status": 200, "status": "verified", "reason": "", "job_count": 58, "source_url": "https://jobs.ashbyhq.com/benchling"}
+,
+{"employer": "Cohere", "provider": "ashby", "token": "cohere", "careers_url": "https://cohere.com/careers", "tags": ["technology", "ai"], "api_status": 200, "status": "verified", "reason": "", "job_count": 146, "source_url": "https://jobs.ashbyhq.com/cohere"}
+,
+{"employer": "Confluent", "provider": "ashby", "token": "confluent", "careers_url": "https://careers.confluent.io/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 23, "source_url": "https://jobs.ashbyhq.com/confluent"}
+,
+{"employer": "Deel", "provider": "ashby", "token": "deel", "careers_url": "https://www.deel.com/careers/", "tags": ["technology"], "api_status": 200, "status": "verification_failed", "reason": "API 200 but empty board", "job_count": 0, "source_url": "https://jobs.ashbyhq.com/deel"}
+,
+{"employer": "Sentry", "provider": "ashby", "token": "sentry", "careers_url": "https://sentry.io/careers/", "tags": ["technology"], "api_status": 200, "status": "verified", "reason": "", "job_count": 42, "source_url": "https://jobs.ashbyhq.com/sentry"}
+,
+{"employer": "Snowflake", "provider": "ashby", "token": "snowflake", "careers_url": "https://careers.snowflake.com/", "tags": ["technology", "data"], "api_status": 200, "status": "verified", "reason": "", "job_count": 389, "source_url": "https://jobs.ashbyhq.com/snowflake"}
+,
+{"employer": "KPMG", "provider": "lever", "token": "kpmg", "careers_url": "https://jobs.lever.co/kpmg", "tags": ["consulting"], "api_status": 200, "status": "research_needed", "reason": "API 200 but zero postings", "job_count": 0, "source_url": "https://jobs.lever.co/kpmg", "api_url": "https://api.lever.co/v0/postings/kpmg"}
+,
+{"employer": "Veeva Systems", "provider": "lever", "token": "veeva", "careers_url": "https://careers.veeva.com/", "tags": ["healthtech"], "api_status": 200, "status": "verified", "reason": "", "job_count": 5, "source_url": "https://jobs.lever.co/veeva", "api_url": "https://api.lever.co/v0/postings/veeva"}
+]

@@ -1,0 +1,1 @@
+-- Research availability backfill is not safely reversible without prior snapshots.

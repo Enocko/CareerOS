@@ -1,0 +1,37 @@
+{
+  "LanguageCode": "EN",
+  "SearchParameters": {},
+  "SearchResult": {
+    "SearchResultCount": 1,
+    "SearchResultCountAll": 2,
+    "SearchResultItems": [
+      {
+        "MatchedObjectId": "10000002",
+        "MatchedObjectDescriptor": {
+          "PositionID": "TEST-POS-002",
+          "PositionTitle": "Pathways Intern - Engineering",
+          "OrganizationName": "National Aeronautics and Space Administration",
+          "PositionURI": "https://www.usajobs.gov/GetJob/ViewDetails/10000002",
+          "ApplyURI": [
+            "https://www.usajobs.gov/GetJob/ViewDetails/10000002?PostingChannelID=RESTAPI"
+          ],
+          "PositionLocationDisplay": "Houston, TX",
+          "PositionFormattedDescription": [
+            {
+              "Label": "Summary",
+              "Content": "<p>Internship opportunity for engineering students.</p>"
+            }
+          ],
+          "PositionScheduleTypeCode": "4",
+          "PositionOfferingTypeCode": "15317",
+          "PositionEndDate": "2027-03-15T23:59:59Z",
+          "TeleworkEligible": false,
+          "RemoteIndicator": true
+        }
+      }
+    ],
+    "UserArea": {
+      "NumberOfPages": "2"
+    }
+  }
+}

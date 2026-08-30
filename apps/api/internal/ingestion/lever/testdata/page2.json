@@ -1,0 +1,17 @@
+[
+  {
+    "id": "33333333-3333-4333-8333-333333333333",
+    "text": "Data Science Co-op (Fall 2026)",
+    "hostedUrl": "https://jobs.lever.co/demo/33333333-3333-4333-8333-333333333333",
+    "applyUrl": "https://jobs.lever.co/demo/33333333-3333-4333-8333-333333333333/apply",
+    "createdAt": 1711403416463,
+    "workplaceType": "on-site",
+    "descriptionPlain": "Apply machine learning to product data.",
+    "categories": {
+      "team": "Data",
+      "location": "New York, NY",
+      "commitment": "Internship",
+      "allLocations": ["New York, NY"]
+    }
+  }
+]

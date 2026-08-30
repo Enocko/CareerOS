@@ -1,0 +1,44 @@
+{
+  "LanguageCode": "EN",
+  "SearchParameters": {},
+  "SearchResult": {
+    "SearchResultCount": 1,
+    "SearchResultCountAll": 2,
+    "SearchResultItems": [
+      {
+        "MatchedObjectId": "10000001",
+        "MatchedObjectDescriptor": {
+          "PositionID": "TEST-POS-001",
+          "PositionTitle": "Student Trainee (Information Technology)",
+          "OrganizationName": "Department of Veterans Affairs",
+          "PositionURI": "https://www.usajobs.gov/GetJob/ViewDetails/10000001",
+          "ApplyURI": [
+            "https://www.usajobs.gov/GetJob/ViewDetails/10000001?PostingChannelID=RESTAPI"
+          ],
+          "PositionLocationDisplay": "Washington, DC",
+          "PositionFormattedDescription": [
+            {
+              "Label": "Duties",
+              "Content": "<p>Assist with IT systems support for veterans services.</p>"
+            }
+          ],
+          "PositionRemuneration": [
+            {
+              "MinimumRange": "45000",
+              "MaximumRange": "55000",
+              "RateIntervalCode": "Per Year"
+            }
+          ],
+          "PositionScheduleTypeCode": "1",
+          "PositionOfferingTypeCode": "15317",
+          "PositionEndDate": "2027-06-30T23:59:59Z",
+          "TeleworkEligible": true,
+          "RemoteIndicator": false
+        }
+      }
+    ],
+    "UserArea": {
+      "NumberOfPages": "2"
+    }
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "generated_at": "2026-08-30",
+  "coverage_gap_analysis_added": "2026-08-30",
+  "methodology": "Authoritative documentation and official organization websites only. No inferred APIs.",
+  "sources": [
+    {
+      "id": "usajobs",
+      "name": "USAJobs",
+      "categories": ["internship", "new_grad_job", "federal_employment"],
+      "official_url": "https://www.usajobs.gov/",
+      "developer_url": "https://developer.usajobs.gov/",
+      "public_api": true,
+      "access_status": "PUBLIC_API_AVAILABLE",
+      "integration_strategy": "Already integrated via official REST API with API key",
+      "redistribution_constraints": "USAJobs Terms of Service; public job data only",
+      "confidence": "high",
+      "evidence": ["https://developer.usajobs.gov/apirequest/", "https://developer.usajobs.gov/Tutorials/Search-Jobs"]
+    },
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse Job Board API",
+      "categories": ["internship", "new_grad_job", "employment"],
+      "official_url": "https://www.greenhouse.com/",
+      "developer_url": "https://developers.greenhouse.io/job-board.html",
+      "public_api": true,
+      "access_status": "PUBLIC_API_AVAILABLE",
+      "integration_strategy": "Already integrated per-employer public board token",
+      "redistribution_constraints": "Public job board JSON; employer-published listings",
+      "confidence": "high",
+      "evidence": ["https://developers.greenhouse.io/job-board.html"]
+    },
+    {
+      "id": "lever",
+      "name": "Lever Postings API",
+      "categories": ["internship", "new_grad_job", "employment"],
+      "official_url": "https://www.lever.co/",
+      "developer_url": "https://github.com/lever/postings-api",
+      "public_api": true,
+      "access_status": "PUBLIC_API_AVAILABLE",
+      "integration_strategy": "Already integrated per-employer public postings endpoint",
+      "confidence": "high",
+      "evidence": ["Lever public postings API documentation"]
+    },
+    {
+      "id": "ashby",
+      "name": "Ashby Public Job Postings API",
+      "categories": ["internship", "new_grad_job", "employment"],
+      "official_url": "https://www.ashbyhq.com/",
+      "developer_url": "https://developers.ashbyhq.com/",
+      "public_api": true,
+      "access_status": "PUBLIC_API_AVAILABLE",
+      "integration_strategy": "Already integrated per-employer public board",
+      "confidence": "high",
+      "evidence": ["Ashby public job postings API"]
+    },
+    {
+      "id": "nsf_reu_directory",
+      "name": "NSF REU Site Search Directory",
+      "categories": ["research", "reu"],
+      "official_url": "https://www.nsf.gov/funding/initiatives/reu/search",
+      "public_api": false,
+      "access_status": "OFFICIAL_LINK_DISCOVERY_ONLY",
+      "integration_strategy": "Manual verified curation linking to official REU site pages; do not treat Award Search API as student application feed",
+      "redistribution_constraints": "RESEARCH_NEEDED on bulk extraction; students apply per-site not via NSF centrally",
+      "confidence": "medium",
+      "evidence": [
+        "https://www.nsf.gov/funding/opportunities/reu-research-experiences-undergraduates",
+        "https://www.nsf.gov/funding/initiatives/reu/search"
+      ],
+      "notes": "NSF Award Search API (api.nsf.gov) covers awards metadata, not a complete student-facing REU application catalog."
+    },
+    {
+      "id": "nsf_award_api",
+      "name": "NSF Award Search Web API",
+      "categories": ["research", "fellowship"],
+      "official_url": "https://www.nsf.gov/developer",
+      "developer_url": "https://resources.research.gov/common/webapi/awardapisearch-v1.htm",
+      "public_api": true,
+      "access_status": "PUBLIC_API_AVAILABLE",
+      "integration_strategy": "Supplemental metadata for research programs; not primary student opportunity ingestion without mapping layer",
+      "confidence": "high",
+      "evidence": ["https://www.nsf.gov/developer", "https://catalog.data.gov/dataset/nsf-award-search-web-api"]
+    },
+    {
+      "id": "tmcf",
+      "name": "Thurgood Marshall College Fund (TMCF)",
+      "categories": ["scholarship", "fellowship", "career_program", "internship"],
+      "official_url": "https://tmcf.org/",
+      "portal_url": "https://scholarships.tmcf.org/",
+      "public_api": false,
+      "access_status": "MANUAL_VERIFIED_CURATION",
+      "integration_strategy": "Partner outreach for structured feed; until then manual verified entries from tmcf.org/open-scholarships",
+      "confidence": "high",
+      "evidence": ["https://tmcf.org/scholarships/open-scholarships/", "https://tmcf.org/programs/"]
+    },
+    {
+      "id": "uncf",
+      "name": "UNCF Scholarships & Programs",
+      "categories": ["scholarship", "fellowship", "internship", "career_program"],
+      "official_url": "https://uncf.org/",
+      "portal_url": "https://scholarships.uncf.org/",
+      "public_api": false,
+      "access_status": "MANUAL_VERIFIED_CURATION",
+      "integration_strategy": "Manual verified curation from scholarships.uncf.org; partnership for feed if available",
+      "confidence": "high",
+      "evidence": ["https://opportunities.uncf.org/s/pre-login-welcome-page", "https://uncf.org/the-latest/beyond-tuition-uncf-scholarships-that-cover-living-expenses-books-and-more"]
+    },
+    {
+      "id": "nasa_ostem",
+      "name": "NASA OSTEM Internships",
+      "categories": ["internship", "research", "fellowship"],
+      "official_url": "https://www.nasa.gov/learning-resources/internship-programs/",
+      "public_api": false,
+      "access_status": "OFFICIAL_LINK_DISCOVERY_ONLY",
+      "integration_strategy": "Link to NASA STEM Gateway application system; Pathways via USAJobs (already partially covered)",
+      "confidence": "high",
+      "evidence": ["https://www.nasa.gov/learning-resources/internship-programs/", "https://www.nasa.gov/careers/pathways/"]
+    },
+    {
+      "id": "handshake_edu_api",
+      "name": "Handshake EDU API",
+      "categories": ["internship", "employment", "career_fair", "event"],
+      "official_url": "https://joinhandshake.com/",
+      "developer_url": "https://support.joinhandshake.com/hc/en-us/articles/31061076506391-Getting-Started-with-EDU-API",
+      "public_api": true,
+      "access_status": "AUTHORIZED_ACCESS_REQUIRED",
+      "integration_strategy": "Institution partnership via Handshake Relationship Manager; institution-scoped read-only API",
+      "redistribution_constraints": "Career Services partner only; not a general third-party job aggregator API",
+      "confidence": "high",
+      "evidence": ["https://support.joinhandshake.com/hc/en-us/articles/360000869147-University-Technical-Support-Guidelines-and-Resources"]
+    },
+    {
+      "id": "linkedin_jobs",
+      "name": "LinkedIn Jobs / Talent Solutions",
+      "categories": ["employment"],
+      "official_url": "https://www.linkedin.com/",
+      "developer_url": "https://learn.microsoft.com/en-us/linkedin/talent/job-postings/api/overview",
+      "public_api": false,
+      "access_status": "NOT_CURRENTLY_INTEGRATABLE",
+      "integration_strategy": "NOT NOW — partner-only job posting APIs; no public job search ingestion for third parties",
+      "confidence": "high",
+      "evidence": ["https://learn.microsoft.com/en-us/linkedin/talent/job-postings/api/overview"]
+    },
+    {
+      "id": "indeed",
+      "name": "Indeed",
+      "categories": ["employment"],
+      "official_url": "https://www.indeed.com/",
+      "developer_url": "https://docs.indeed.com/",
+      "public_api": false,
+      "access_status": "AUTHORIZED_ACCESS_REQUIRED",
+      "integration_strategy": "Partner-only Job Sync / ATS integrations; legacy Publisher API deprecated for new integrations",
+      "confidence": "high",
+      "evidence": ["https://docs.indeed.com/job-sync-api/integrate-with-job-sync-api"]
+    },
+    {
+      "id": "jobright",
+      "name": "Jobright",
+      "categories": ["employment"],
+      "official_url": "https://jobright.ai/",
+      "public_api": false,
+      "access_status": "NOT_CURRENTLY_INTEGRATABLE",
+      "integration_strategy": "NOT NOW — no public API; third-party scrapers are unauthorized",
+      "confidence": "high",
+      "evidence": ["Third-party product listings report no public API; no official developer documentation found"]
+    },
+    {
+      "id": "simplify",
+      "name": "Simplify",
+      "categories": ["employment", "internship"],
+      "official_url": "https://simplify.jobs/",
+      "public_api": false,
+      "access_status": "PARTNERSHIP_RECOMMENDED",
+      "integration_strategy": "NOT NOW — no public API per simplify.jobs/llms.txt; contact support@simplify.jobs for partnership",
+      "confidence": "high",
+      "evidence": ["https://simplify.jobs/llms.txt", "https://simplify.jobs/"]
+    },
+    {
+      "id": "nsbe",
+      "name": "National Society of Black Engineers (NSBE)",
+      "categories": ["scholarship", "internship", "employment", "conference"],
+      "official_url": "https://nsbe.org/",
+      "portal_url": "https://nsbe.smapply.io/",
+      "public_api": false,
+      "access_status": "MANUAL_VERIFIED_CURATION",
+      "integration_strategy": "Scholarships via smapply portal curation; career center listings via partnership",
+      "confidence": "medium",
+      "evidence": ["https://nsbe.org/scholarships/", "https://nsbe.org/memberships/"]
+    },
+    {
+      "id": "grambling_career_center",
+      "name": "Grambling State University Career Center (pilot)",
+      "categories": ["internship", "scholarship", "career_program", "employment"],
+      "official_url": "RESEARCH_NEEDED",
+      "public_api": false,
+      "access_status": "CAREER_CENTER_SUBMISSION",
+      "integration_strategy": "Pilot manual verified curation + future career-center submission workflow",
+      "confidence": "medium",
+      "evidence": ["CareerOS pilot institution; no automated feed assumed"]
+    },
+    {
+      "id": "colorstack",
+      "name": "ColorStack",
+      "categories": ["internship", "new_grad_job", "career_program", "conference", "hackathon"],
+      "official_url": "https://www.colorstack.org/",
+      "member_app_url": "https://app.colorstack.io/",
+      "open_source_platform": "https://github.com/colorstackorg/oyster",
+      "public_api": false,
+      "access_status": "PARTNERSHIP_RECOMMENDED",
+      "integration_strategy": "Partnership feed for member opportunity board; until then use as coverage signal only. Do not scrape Slack or authenticated Oyster UI.",
+      "redistribution_constraints": "Opportunities are member-only (Slack, Oyster). No documented third-party redistribution rights. Contact partnerships@colorstack.org.",
+      "confidence": "high",
+      "evidence": [
+        "https://www.colorstack.org/",
+        "https://www.colorstack.org/impact-report",
+        "https://github.com/colorstackorg/oyster",
+        "https://www.linkedin.com/posts/colorstack_nationalappday-activity-7272752969073221632-yt9T"
+      ],
+      "notes": "Oyster is ColorStack's community platform, NOT Oyster HR (oysterhr.com). FY24 report: 200+ job opportunities shared monthly via Slack; built-in Oyster opportunities board launched Dec 2024."
+    },
+    {
+      "id": "pathways_to_science",
+      "name": "Pathways to Science (IBP)",
+      "categories": ["research", "reu", "scholarship", "fellowship", "internship"],
+      "official_url": "https://www.pathwaystoscience.org/",
+      "public_api": false,
+      "access_status": "PUBLIC_STRUCTURED_SOURCE",
+      "integration_strategy": "Manual verified curation from official directory; partnership inquiry to IBP for authorized feed",
+      "confidence": "high",
+      "evidence": ["https://www.pathwaystoscience.org/programs.aspx?adv=adv", "https://www.pathwaystoscience.org/contactus.aspx"]
+    },
+    {
+      "id": "doe_suli",
+      "name": "DOE Science Undergraduate Laboratory Internships (SULI)",
+      "categories": ["research", "internship"],
+      "official_url": "https://science.osti.gov/wdts/suli",
+      "public_api": false,
+      "access_status": "OFFICIAL_PUBLIC_PAGE",
+      "integration_strategy": "Annual manual verified entries linking to official application portal; no public listing API",
+      "confidence": "high",
+      "evidence": ["https://science.osti.gov/wdts/suli/How-to-Apply"]
+    },
+    {
+      "id": "grants_gov_api",
+      "name": "Grants.gov REST API",
+      "categories": ["fellowship", "research", "scholarship"],
+      "official_url": "https://www.grants.gov/",
+      "developer_url": "https://www.grants.gov/api/api-guide",
+      "public_api": true,
+      "access_status": "API",
+      "integration_strategy": "search2 public endpoint for federal opportunities; filter for student-eligible STEM programs",
+      "confidence": "high",
+      "evidence": ["https://www.grants.gov/api/common/search2"]
+    },
+    {
+      "id": "profellow",
+      "name": "ProFellow",
+      "categories": ["fellowship", "scholarship"],
+      "official_url": "https://www.profellow.com/",
+      "public_api": false,
+      "access_status": "PUBLIC_STRUCTURED_SOURCE",
+      "integration_strategy": "Link-out discovery; manual verified curation; no public API",
+      "confidence": "high",
+      "evidence": ["https://www.profellow.com/sign-up/"]
+    },
+    {
+      "id": "devpost",
+      "name": "Devpost",
+      "categories": ["hackathon", "competition"],
+      "official_url": "https://devpost.com/",
+      "public_api": false,
+      "access_status": "RESEARCH_NEEDED",
+      "integration_strategy": "NOT NOW for automated ingestion — no official API; unofficial scrapers violate recommended policy",
+      "confidence": "medium",
+      "evidence": ["No official developer API documented"]
+    }
+  ],
+  "aggregator_policy_summary": {
+    "authorized_ingestion_requires": [
+      "official public API documented by source",
+      "signed partner/developer agreement",
+      "explicit permission for store/redistribute where applicable"
+    ],
+    "prohibited": [
+      "CAPTCHA bypass",
+      "authenticated consumer scraping",
+      "undocumented private APIs",
+      "copying aggregator databases",
+      "proxy evasion"
+    ]
+  }
+}
