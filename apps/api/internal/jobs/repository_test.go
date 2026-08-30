@@ -51,11 +51,11 @@ func TestEnqueueIdempotent(t *testing.T) {
 func TestClaimConcurrentSafety(t *testing.T) {
 	repo, pool := testRepo(t)
 	ctx := context.Background()
-	_, _ = pool.Exec(ctx, `DELETE FROM background_jobs`)
+	_, _ = pool.Exec(ctx, `DELETE FROM background_jobs WHERE idempotency_key LIKE 'test:%'`)
 	key := "test:claim:" + uuid.NewString()
-	_, _, err := repo.Enqueue(ctx, jobs.TypeDeadlineReminder, map[string]string{"x": "1"}, key, time.Now().UTC(), 3)
-	if err != nil {
-		t.Fatal(err)
+	jobID, created, err := repo.Enqueue(ctx, jobs.TypeDeadlineReminder, map[string]string{"x": "1"}, key, time.Now().UTC(), 3)
+	if err != nil || !created {
+		t.Fatalf("enqueue: created=%v err=%v", created, err)
 	}
 
 	var wg sync.WaitGroup
@@ -64,7 +64,7 @@ func TestClaimConcurrentSafety(t *testing.T) {
 		wg.Add(1)
 		go func(worker string) {
 			defer wg.Done()
-			job, err := repo.ClaimNext(ctx, worker, time.Now().UTC())
+			job, err := repo.ClaimByID(ctx, worker, jobID, time.Now().UTC())
 			if err != nil {
 				t.Error(err)
 				return

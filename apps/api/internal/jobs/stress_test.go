@@ -14,7 +14,7 @@ import (
 func TestQueueStressConcurrentClaims(t *testing.T) {
 	repo, pool := testRepo(t)
 	ctx := context.Background()
-	_, _ = pool.Exec(ctx, `DELETE FROM background_jobs`)
+	_, _ = pool.Exec(ctx, `DELETE FROM background_jobs WHERE idempotency_key LIKE 'test:%'`)
 
 	const total = 40
 	ids := make([]string, 0, total)

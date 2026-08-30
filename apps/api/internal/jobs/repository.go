@@ -101,6 +101,55 @@ func (r *Repository) ClaimNext(ctx context.Context, workerID string, now time.Ti
 	return &job, nil
 }
 
+// ClaimByID atomically claims a specific due job for a worker.
+func (r *Repository) ClaimByID(ctx context.Context, workerID string, jobID uuid.UUID, now time.Time) (*Job, error) {
+	tx, err := r.pool.Begin(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("begin claim tx: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	var job Job
+	var payload []byte
+	err = tx.QueryRow(ctx, `
+		SELECT id, job_type, payload, status, idempotency_key, attempts, max_attempts,
+		       run_at, locked_at, locked_by, last_error, created_at, updated_at, completed_at
+		FROM background_jobs
+		WHERE id = $1 AND status IN ($2, $3) AND run_at <= $4
+		FOR UPDATE
+	`, jobID, StatusQueued, StatusRetryable, now).Scan(
+		&job.ID, &job.JobType, &payload, &job.Status, &job.IdempotencyKey,
+		&job.Attempts, &job.MaxAttempts, &job.RunAt, &job.LockedAt, &job.LockedBy,
+		&job.LastError, &job.CreatedAt, &job.UpdatedAt, &job.CompletedAt,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("select claimable job: %w", err)
+	}
+	job.Payload = payload
+
+	_, err = tx.Exec(ctx, `
+		UPDATE background_jobs
+		SET status = $2, locked_at = $3, locked_by = $4, attempts = attempts + 1, updated_at = $3
+		WHERE id = $1
+	`, job.ID, StatusProcessing, now, workerID)
+	if err != nil {
+		return nil, fmt.Errorf("mark job processing: %w", err)
+	}
+	job.Status = StatusProcessing
+	job.Attempts++
+	locked := now
+	job.LockedAt = &locked
+	job.LockedBy = &workerID
+
+	if err := tx.Commit(ctx); err != nil {
+		return nil, fmt.Errorf("commit claim tx: %w", err)
+	}
+	return &job, nil
+}
+
 // MarkCompleted marks a job successful.
 func (r *Repository) MarkCompleted(ctx context.Context, jobID uuid.UUID, now time.Time) error {
 	_, err := r.pool.Exec(ctx, `

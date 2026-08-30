@@ -36,7 +36,7 @@ jobs:
         run: ./scripts/migrate.sh up
       - name: Go test
         working-directory: apps/api
-        run: go test ./...
+        run: go test -p 1 ./...
 
   frontend:
     runs-on: ubuntu-latest

@@ -32,7 +32,7 @@ func TestNotificationsAPIFlow(t *testing.T) {
 	deadlineStr := deadline.Format("2006-01-02")
 	key := jobs.ReminderIdempotencyKey(userID, oppID, &appID, deadlineStr, 3)
 
-	_, created, err := jobsRepo.Enqueue(context.Background(), jobs.TypeDeadlineReminder, jobs.DeadlineReminderPayload{
+	jobID, created, err := jobsRepo.Enqueue(context.Background(), jobs.TypeDeadlineReminder, jobs.DeadlineReminderPayload{
 		UserID: userID, OpportunityID: oppID, ApplicationID: &appID, ReminderKind: "application",
 		DeadlineDate: deadlineStr, WindowDays: 3, OpportunityTitle: "Reminder Test Role",
 	}, key, now, 5)
@@ -40,7 +40,7 @@ func TestNotificationsAPIFlow(t *testing.T) {
 		t.Fatalf("enqueue reminder job: created=%v err=%v", created, err)
 	}
 
-	job, err := jobsRepo.ClaimNext(context.Background(), "integration-test", now)
+	job, err := jobsRepo.ClaimByID(context.Background(), "integration-test", jobID, now)
 	if err != nil || job == nil {
 		t.Fatalf("claim job: %v", err)
 	}
@@ -52,7 +52,7 @@ func TestNotificationsAPIFlow(t *testing.T) {
 	}
 
 	// Re-enqueue after completion is allowed; notification idempotency prevents duplicates.
-	_, createdDup, err := jobsRepo.Enqueue(context.Background(), jobs.TypeDeadlineReminder, jobs.DeadlineReminderPayload{
+	dupJobID, createdDup, err := jobsRepo.Enqueue(context.Background(), jobs.TypeDeadlineReminder, jobs.DeadlineReminderPayload{
 		UserID: userID, OpportunityID: oppID, ApplicationID: &appID, ReminderKind: "application",
 		DeadlineDate: deadlineStr, WindowDays: 3, OpportunityTitle: "Reminder Test Role",
 	}, key, now, 5)
@@ -62,7 +62,7 @@ func TestNotificationsAPIFlow(t *testing.T) {
 	if !createdDup {
 		t.Fatal("expected completed jobs to allow re-enqueue with same idempotency key")
 	}
-	dupJob, err := jobsRepo.ClaimNext(context.Background(), "integration-test-2", now)
+	dupJob, err := jobsRepo.ClaimByID(context.Background(), "integration-test-2", dupJobID, now)
 	if err != nil || dupJob == nil {
 		t.Fatalf("claim duplicate job: %v", err)
 	}
