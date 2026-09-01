@@ -104,7 +104,7 @@ export function OpportunitiesPage() {
 
   useEffect(() => {
     setPage(1)
-  }, [debouncedSearch, category, workArrangement])
+  }, [debouncedSearch, category, workArrangement, sort])
 
   useEffect(() => {
     let cancelled = false
@@ -164,9 +164,17 @@ export function OpportunitiesPage() {
   function patchParams(patch: Record<string, string | null>) {
     const next = new URLSearchParams(searchParams)
     next.set('type', browseType)
+    let resetPage = false
     for (const [key, value] of Object.entries(patch)) {
-      if (value == null || value === '') next.delete(key)
-      else next.set(key, value)
+      if (value == null || value === '') {
+        next.delete(key)
+        if (key === 'page') resetPage = true
+      } else {
+        next.set(key, value)
+      }
+    }
+    if (resetPage) {
+      setPage(1)
     }
     setSearchParams(next)
   }
@@ -279,11 +287,12 @@ export function OpportunitiesPage() {
                 patchParams({ work_arrangement: e.target.value || null, page: null })
               }
               aria-label="Filter by work arrangement"
+              title="Filter by work arrangement"
             >
-              <option value="">All arrangements</option>
-              <option value="remote">Remote</option>
-              <option value="hybrid">Hybrid</option>
-              <option value="on_site">On-site</option>
+              <option value="">Filter: all arrangements</option>
+              <option value="remote">Filter: remote only</option>
+              <option value="hybrid">Filter: hybrid only</option>
+              <option value="on_site">Filter: on-site only</option>
             </select>
             <select
               value={sort}
@@ -291,10 +300,11 @@ export function OpportunitiesPage() {
                 patchParams({ sort: e.target.value === 'newest' ? null : e.target.value, page: null })
               }
               aria-label="Sort opportunities"
+              title="Sort opportunities"
             >
-              <option value="newest">Newest first</option>
-              <option value="deadline">Deadline soonest</option>
-              <option value="arrangement">Remote first</option>
+              <option value="newest">Sort: newest first</option>
+              <option value="deadline">Sort: deadline soonest</option>
+              <option value="arrangement">Sort: remote first</option>
             </select>
           </>
         )}
