@@ -24,6 +24,13 @@ func NewRepository(pool *pgxpool.Pool) *Repository {
 
 // List returns a paginated list of open opportunities matching the filter.
 func (r *Repository) List(ctx context.Context, studentID uuid.UUID, filter ListFilter) ([]Summary, int, error) {
+	if shouldDedupeEmployment(filter.CatalogScope) {
+		return r.listDeduped(ctx, studentID, filter)
+	}
+	return r.listPlain(ctx, studentID, filter)
+}
+
+func (r *Repository) listPlain(ctx context.Context, studentID uuid.UUID, filter ListFilter) ([]Summary, int, error) {
 	where, filterArgs := buildListWhere(filter, 1)
 
 	countQuery := fmt.Sprintf(`
@@ -93,6 +100,106 @@ func (r *Repository) List(ctx context.Context, studentID uuid.UUID, filter ListF
 			&s.VerificationStatus, &s.SourceName, &s.LastCheckedAt,
 			&s.ExperienceLevel, &s.CareerFamily, &s.RelevanceTier,
 			&typeMetadata, &s.IsSaved,
+		); err != nil {
+			return nil, 0, fmt.Errorf("scan opportunity: %w", err)
+		}
+		if len(typeMetadata) > 0 && string(typeMetadata) != "{}" {
+			s.TypeMetadata = typeMetadata
+		}
+		s.Skills = normalizeSlice(s.Skills)
+		s.Tags = normalizeSlice(s.Tags)
+		results = append(results, s)
+	}
+
+	if results == nil {
+		results = []Summary{}
+	}
+
+	return results, total, rows.Err()
+}
+
+func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filter ListFilter) ([]Summary, int, error) {
+	where, filterArgs := buildListWhere(filter, 1)
+	partitionKey := employmentDedupPartitionSQL()
+
+	countQuery := fmt.Sprintf(`
+		WITH ranked AS (
+			SELECT o.id,
+				ROW_NUMBER() OVER (
+					PARTITION BY %s
+					ORDER BY o.last_checked_at DESC NULLS LAST, o.created_at DESC
+				) AS pick_rank
+			FROM opportunities o
+			WHERE %s
+		)
+		SELECT COUNT(*) FROM ranked WHERE pick_rank = 1
+	`, partitionKey, where)
+
+	var total int
+	if err := r.pool.QueryRow(ctx, countQuery, filterArgs...).Scan(&total); err != nil {
+		return nil, 0, fmt.Errorf("count opportunities: %w", err)
+	}
+
+	offset := (filter.Page - 1) * filter.PerPage
+	listWhere, listFilterArgs := buildListWhere(filter, 2)
+	listArgs := append([]any{studentID}, listFilterArgs...)
+	listArgs = append(listArgs, filter.PerPage, offset)
+
+	limitArg := fmt.Sprintf("$%d", len(listArgs)-1)
+	offsetArg := fmt.Sprintf("$%d", len(listArgs))
+
+	orderBy := dedupedOrderBy(filter)
+
+	listQuery := fmt.Sprintf(`
+		WITH ranked AS (
+			SELECT o.id, o.title, o.organization_name, o.category, o.opportunity_type,
+			       o.verification_method, o.employment_mode, o.location,
+			       o.work_arrangement, o.deadline, o.skills, o.tags, o.status,
+			       o.verification_status, o.source, o.last_checked_at,
+			       o.experience_level, o.career_family, o.relevance_tier,
+			       o.type_metadata, o.created_at,
+			       (so.id IS NOT NULL) AS is_saved,
+			       ROW_NUMBER() OVER (
+			           PARTITION BY %s
+			           ORDER BY (so.id IS NOT NULL) DESC,
+			                    o.last_checked_at DESC NULLS LAST,
+			                    o.created_at DESC
+			       ) AS pick_rank,
+			       COUNT(*) OVER (PARTITION BY %s) AS listing_count
+			FROM opportunities o
+			LEFT JOIN saved_opportunities so
+				ON so.opportunity_id = o.id AND so.student_id = $1
+			WHERE %s
+		)
+		SELECT id, title, organization_name, category, opportunity_type,
+		       verification_method, employment_mode, location,
+		       work_arrangement, deadline, skills, tags, status,
+		       verification_status, source, last_checked_at,
+		       experience_level, career_family, relevance_tier,
+		       type_metadata, is_saved, listing_count
+		FROM ranked
+		WHERE pick_rank = 1
+		ORDER BY %s
+		LIMIT %s OFFSET %s
+	`, partitionKey, partitionKey, listWhere, orderBy, limitArg, offsetArg)
+
+	rows, err := r.pool.Query(ctx, listQuery, listArgs...)
+	if err != nil {
+		return nil, 0, fmt.Errorf("list opportunities: %w", err)
+	}
+	defer rows.Close()
+
+	var results []Summary
+	for rows.Next() {
+		var s Summary
+		var typeMetadata json.RawMessage
+		if err := rows.Scan(
+			&s.ID, &s.Title, &s.OrganizationName, &s.Category, &s.OpportunityType,
+			&s.VerificationMethod, &s.EmploymentMode, &s.Location,
+			&s.WorkArrangement, &s.Deadline, &s.Skills, &s.Tags, &s.Status,
+			&s.VerificationStatus, &s.SourceName, &s.LastCheckedAt,
+			&s.ExperienceLevel, &s.CareerFamily, &s.RelevanceTier,
+			&typeMetadata, &s.IsSaved, &s.ListingCount,
 		); err != nil {
 			return nil, 0, fmt.Errorf("scan opportunity: %w", err)
 		}
@@ -317,20 +424,6 @@ func buildListWhere(filter ListFilter, startIndex int) (string, []any) {
 	}
 
 	return strings.Join(conditions, " AND "), args
-}
-
-func researchOrderBy() string {
-	return `CASE COALESCE(o.type_metadata->>'application_status', 'unknown')
-		WHEN 'open' THEN 1
-		WHEN 'upcoming' THEN 2
-		WHEN 'unknown' THEN 3
-		WHEN 'closed' THEN 4
-		ELSE 5
-	END, o.deadline ASC NULLS LAST, o.created_at DESC`
-}
-
-func researchVisibilityCondition() string {
-	return "o.opportunity_type = 'research'"
 }
 
 func employmentVisibilityCondition(filter ListFilter) string {

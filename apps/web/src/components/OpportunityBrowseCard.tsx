@@ -95,7 +95,13 @@ export function OpportunityBrowseCard({ opp, browseType }: OpportunityBrowseCard
           <span className="badge badge-muted">{formatCategory(opp.career_family)}</span>
         )}
         <span className="badge badge-muted">{opp.work_arrangement}</span>
-        {opp.location && <span className="badge badge-muted">{opp.location}</span>}
+        {opp.listing_count && opp.listing_count > 1 ? (
+          <span className="badge badge-muted">
+            {opp.listing_count} locations
+          </span>
+        ) : (
+          opp.location && <span className="badge badge-muted">{opp.location}</span>
+        )}
       </div>
       <p className="meta">Deadline: {formatDate(opp.deadline)}</p>
       {opp.verification_status === 'verified' && (

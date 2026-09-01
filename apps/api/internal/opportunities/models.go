@@ -73,6 +73,7 @@ type Summary struct {
 	CareerFamily       *string    `json:"career_family,omitempty"`
 	RelevanceTier      *string         `json:"relevance_tier,omitempty"`
 	TypeMetadata       json.RawMessage `json:"type_metadata,omitempty"`
+	ListingCount       int             `json:"listing_count,omitempty"`
 }
 
 // Catalog scope values for unified Browse (query param `type`).

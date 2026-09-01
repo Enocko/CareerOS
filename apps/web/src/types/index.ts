@@ -54,6 +54,7 @@ export interface OpportunitySummary {
   career_family?: string | null
   relevance_tier?: string | null
   type_metadata?: Record<string, unknown>
+  listing_count?: number
 }
 
 export interface ResearchTypeMetadata {

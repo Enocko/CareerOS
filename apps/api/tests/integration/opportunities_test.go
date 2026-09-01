@@ -263,5 +263,63 @@ func TestOpportunitiesPagination(t *testing.T) {
 	}
 }
 
+func TestOpportunitiesEmploymentDedup(t *testing.T) {
+	router, pool := setupTestRouterWithPool(t)
+	token := registerAndGetToken(t, router)
+
+	title := "DEDUP-TEST-MARKER Associate Software Engineer 2027"
+	insertEmploymentListing(t, pool, title, "Boston, MA", "DEDUP-A")
+	insertEmploymentListing(t, pool, title, "Pleasanton, CA", "DEDUP-B")
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=DEDUP-TEST-MARKER&per_page=50", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("list: expected 200, got %d body=%s", rec.Code, rec.Body.String())
+	}
+
+	var resp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if len(resp.Data) != 1 {
+		t.Fatalf("expected 1 deduped listing, got %d", len(resp.Data))
+	}
+	count, ok := resp.Data[0]["listing_count"].(float64)
+	if !ok || int(count) != 2 {
+		t.Fatalf("expected listing_count=2, got %v", resp.Data[0]["listing_count"])
+	}
+}
+
+func insertEmploymentListing(t *testing.T, pool *pgxpool.Pool, title, location, externalPrefix string) {
+	t.Helper()
+	id := uuid.New()
+	externalID := fmt.Sprintf("%s-%s", externalPrefix, uuid.NewString())
+	now := time.Now().UTC()
+	sourceID := "c3000000-0000-4000-8000-000000000001"
+	_, err := pool.Exec(context.Background(), `
+		INSERT INTO opportunities (
+			id, source_id, external_id, title, organization_name, description,
+			category, opportunity_type, work_arrangement, location, application_url, source_url, source,
+			verification_status, first_seen_at, last_seen_at, last_checked_at,
+			status, skills, tags, missed_sync_count,
+			experience_level, career_family, education_level, relevance_tier, classification_reasons
+		) VALUES (
+			$1, $2, $3, $4, 'Dedup Test Corp', 'Test opportunity.',
+			'internship', 'employment', 'on_site', $5, 'https://jobs.lever.co/veeva/test', 'https://jobs.lever.co/veeva/test', 'Lever · Veeva Systems',
+			'verified', $6, $6, $6, 'open', '{}', '{integration}', 0,
+			'early_career', 'software_engineering', 'unspecified', 'high_confidence_technical', '{early_career,software_engineering}'
+		)
+	`, id, sourceID, externalID, title, location, now)
+	if err != nil {
+		t.Fatalf("insert employment listing: %v", err)
+	}
+	t.Cleanup(func() {
+		_, _ = pool.Exec(context.Background(), `DELETE FROM opportunities WHERE id = $1`, id)
+	})
+}
+
 // Ensure bytes import is used by other tests in package
 var _ = bytes.NewReader
