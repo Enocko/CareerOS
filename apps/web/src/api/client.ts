@@ -33,11 +33,25 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${this.token}`
     }
 
-    const response = await fetch(`${API_BASE}${path}`, {
-      ...options,
-      headers,
-      credentials: 'include',
-    })
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), 15000)
+
+    let response: Response
+    try {
+      response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers,
+        credentials: 'include',
+        signal: options.signal ?? controller.signal,
+      })
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        throw new Error('Request timed out. The server may be waking up — try again in a moment.')
+      }
+      throw err
+    } finally {
+      window.clearTimeout(timeout)
+    }
 
     if (response.status === 204 || response.status === 205) {
       if (!response.ok) {

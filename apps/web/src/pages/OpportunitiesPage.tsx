@@ -89,6 +89,9 @@ export function OpportunitiesPage() {
         else next.delete('sort')
         if (page > 1) next.set('page', String(page))
         else next.delete('page')
+        if (next.toString() === prev.toString()) {
+          return prev
+        }
         return next
       },
       { replace: true },
@@ -102,7 +105,13 @@ export function OpportunitiesPage() {
     }
   }, [browseType])
 
+  // Reset to page 1 when filters/sort change (skip initial mount).
+  const skipInitialPageReset = useRef(true)
   useEffect(() => {
+    if (skipInitialPageReset.current) {
+      skipInitialPageReset.current = false
+      return
+    }
     setPage(1)
   }, [debouncedSearch, category, workArrangement, sort])
 
