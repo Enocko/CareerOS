@@ -83,12 +83,20 @@ const (
 	CatalogScopeResearch   = "research"
 )
 
+// Browse sort options (query param `sort`).
+const (
+	SortNewest      = "newest"
+	SortDeadline    = "deadline"
+	SortArrangement = "arrangement"
+)
+
 // ListFilter holds query parameters for listing opportunities.
 type ListFilter struct {
 	Query               string
 	Category            string
 	OpportunityType     string
 	CatalogScope        string
+	Sort                string
 	ApplicationStatus   string
 	WorkArrangement     string
 	Location            string

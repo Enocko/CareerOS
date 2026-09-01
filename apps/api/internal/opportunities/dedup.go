@@ -40,27 +40,3 @@ func researchOrderBy() string {
 func researchVisibilityCondition() string {
 	return "o.opportunity_type = 'research'"
 }
-
-func dedupedOrderBy(filter ListFilter) string {
-	switch filter.CatalogScope {
-	case CatalogScopeAll:
-		return `CASE
-			WHEN opportunity_type = 'research' AND COALESCE(type_metadata->>'application_status', 'unknown') = 'open' THEN 1
-			WHEN opportunity_type = 'research' AND COALESCE(type_metadata->>'application_status', 'unknown') = 'upcoming' THEN 2
-			WHEN opportunity_type = 'employment' THEN 3
-			WHEN opportunity_type = 'research' AND COALESCE(type_metadata->>'application_status', 'unknown') = 'unknown' THEN 4
-			WHEN opportunity_type = 'research' AND COALESCE(type_metadata->>'application_status', 'unknown') = 'closed' THEN 5
-			ELSE 6
-		END, deadline ASC NULLS LAST, created_at DESC`
-	case CatalogScopeResearch:
-		return `CASE COALESCE(type_metadata->>'application_status', 'unknown')
-			WHEN 'open' THEN 1
-			WHEN 'upcoming' THEN 2
-			WHEN 'unknown' THEN 3
-			WHEN 'closed' THEN 4
-			ELSE 5
-		END, deadline ASC NULLS LAST, created_at DESC`
-	default:
-		return "deadline ASC NULLS LAST, created_at DESC"
-	}
-}

@@ -52,20 +52,7 @@ func (r *Repository) listPlain(ctx context.Context, studentID uuid.UUID, filter 
 	limitArg := fmt.Sprintf("$%d", len(listArgs)-1)
 	offsetArg := fmt.Sprintf("$%d", len(listArgs))
 
-	orderBy := "o.deadline ASC NULLS LAST, o.created_at DESC"
-	switch filter.CatalogScope {
-	case CatalogScopeAll:
-		orderBy = `CASE
-			WHEN o.opportunity_type = 'research' AND COALESCE(o.type_metadata->>'application_status', 'unknown') = 'open' THEN 1
-			WHEN o.opportunity_type = 'research' AND COALESCE(o.type_metadata->>'application_status', 'unknown') = 'upcoming' THEN 2
-			WHEN o.opportunity_type = 'employment' THEN 3
-			WHEN o.opportunity_type = 'research' AND COALESCE(o.type_metadata->>'application_status', 'unknown') = 'unknown' THEN 4
-			WHEN o.opportunity_type = 'research' AND COALESCE(o.type_metadata->>'application_status', 'unknown') = 'closed' THEN 5
-			ELSE 6
-		END, o.deadline ASC NULLS LAST, o.created_at DESC`
-	case CatalogScopeResearch:
-		orderBy = researchOrderBy()
-	}
+	orderBy := plainOrderBy(filter)
 
 	listQuery := fmt.Sprintf(`
 		SELECT o.id, o.title, o.organization_name, o.category, o.opportunity_type,
@@ -157,13 +144,11 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 			       o.work_arrangement, o.deadline, o.skills, o.tags, o.status,
 			       o.verification_status, o.source, o.last_checked_at,
 			       o.experience_level, o.career_family, o.relevance_tier,
-			       o.type_metadata, o.created_at,
+			       o.type_metadata, o.created_at, o.first_seen_at,
 			       (so.id IS NOT NULL) AS is_saved,
 			       ROW_NUMBER() OVER (
 			           PARTITION BY %s
-			           ORDER BY (so.id IS NOT NULL) DESC,
-			                    o.last_checked_at DESC NULLS LAST,
-			                    o.created_at DESC
+			           ORDER BY %s
 			       ) AS pick_rank,
 			       COUNT(*) OVER (PARTITION BY %s) AS listing_count
 			FROM opportunities o
@@ -181,7 +166,7 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 		WHERE pick_rank = 1
 		ORDER BY %s
 		LIMIT %s OFFSET %s
-	`, partitionKey, partitionKey, listWhere, orderBy, limitArg, offsetArg)
+	`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere, orderBy, limitArg, offsetArg)
 
 	rows, err := r.pool.Query(ctx, listQuery, listArgs...)
 	if err != nil {

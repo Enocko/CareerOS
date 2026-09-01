@@ -321,5 +321,65 @@ func insertEmploymentListing(t *testing.T, pool *pgxpool.Pool, title, location, 
 	})
 }
 
+func TestOpportunitiesSortNewestFirst(t *testing.T) {
+	router, pool := setupTestRouterWithPool(t)
+	token := registerAndGetToken(t, router)
+
+	olderTitle := "SORT-TEST Older Software Intern"
+	newerTitle := "SORT-TEST Newer Software Intern"
+	insertSortableOpportunity(t, pool, olderTitle, time.Now().UTC().Add(-72*time.Hour))
+	insertSortableOpportunity(t, pool, newerTitle, time.Now().UTC())
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=SORT-TEST&sort=newest&per_page=20", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("list: expected 200, got %d body=%s", rec.Code, rec.Body.String())
+	}
+
+	var resp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if len(resp.Data) < 2 {
+		t.Fatalf("expected at least 2 listings, got %d", len(resp.Data))
+	}
+	firstTitle, _ := resp.Data[0]["title"].(string)
+	if firstTitle != newerTitle {
+		t.Fatalf("expected newest listing first, got %q before %q", firstTitle, newerTitle)
+	}
+}
+
+func insertSortableOpportunity(t *testing.T, pool *pgxpool.Pool, title string, firstSeen time.Time) {
+	t.Helper()
+	id := uuid.New()
+	externalID := "SORT-" + id.String()
+	sourceID := "c3000000-0000-4000-8000-000000000001"
+	_, err := pool.Exec(context.Background(), `
+		INSERT INTO opportunities (
+			id, source_id, external_id, title, organization_name, description,
+			category, opportunity_type, work_arrangement, application_url, source_url, source,
+			verification_status, first_seen_at, last_seen_at, last_checked_at,
+			status, skills, tags, missed_sync_count,
+			experience_level, career_family, education_level, relevance_tier, classification_reasons,
+			created_at, updated_at
+		) VALUES (
+			$1, $2, $3, $4, 'Sort Test Corp', 'Test opportunity.',
+			'internship', 'employment', 'remote', 'https://example.com/jobs', 'https://example.com/jobs', 'USAJobs',
+			'verified', $5, $5, $5, 'open', '{}', '{integration}', 0,
+			'internship', 'software_engineering', 'unspecified', 'high_confidence_technical', '{internship}',
+			$5, $5
+		)
+	`, id, sourceID, externalID, title, firstSeen)
+	if err != nil {
+		t.Fatalf("insert sortable opportunity: %v", err)
+	}
+	t.Cleanup(func() {
+		_, _ = pool.Exec(context.Background(), `DELETE FROM opportunities WHERE id = $1`, id)
+	})
+}
+
 // Ensure bytes import is used by other tests in package
 var _ = bytes.NewReader

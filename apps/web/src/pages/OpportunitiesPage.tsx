@@ -6,10 +6,16 @@ import { ResearchBrowseSections } from '../components/ResearchBrowseSections'
 import type { OpportunitySummary } from '../types'
 
 export type BrowseType = 'all' | 'employment' | 'research'
+export type BrowseSort = 'newest' | 'deadline' | 'arrangement'
 
 function parseBrowseType(raw: string | null): BrowseType {
   if (raw === 'employment' || raw === 'research') return raw
   return 'all'
+}
+
+function parseBrowseSort(raw: string | null): BrowseSort {
+  if (raw === 'deadline' || raw === 'arrangement') return raw
+  return 'newest'
 }
 
 function useDebouncedValue<T>(value: T, delayMs: number): T {
@@ -42,6 +48,7 @@ function isEmploymentOpportunity(opp: OpportunitySummary): boolean {
 export function OpportunitiesPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const browseType = parseBrowseType(searchParams.get('type'))
+  const sort = parseBrowseSort(searchParams.get('sort'))
   const category = searchParams.get('category') ?? ''
   const workArrangement = searchParams.get('work_arrangement') ?? ''
 
@@ -78,13 +85,15 @@ export function OpportunitiesPage() {
         else next.delete('category')
         if (workArrangement && browseType !== 'research') next.set('work_arrangement', workArrangement)
         else next.delete('work_arrangement')
+        if (browseType !== 'research' && sort !== 'newest') next.set('sort', sort)
+        else next.delete('sort')
         if (page > 1) next.set('page', String(page))
         else next.delete('page')
         return next
       },
       { replace: true },
     )
-  }, [browseType, debouncedSearch, category, workArrangement, page, setSearchParams])
+  }, [browseType, debouncedSearch, category, workArrangement, sort, page, setSearchParams])
 
   useEffect(() => {
     if (prevBrowseType.current !== browseType) {
@@ -119,6 +128,9 @@ export function OpportunitiesPage() {
         if (workArrangement && browseType !== 'research') {
           filters.work_arrangement = workArrangement
         }
+        if (browseType !== 'research') {
+          filters.sort = sort
+        }
 
         const resp = await api.listOpportunities(filters)
         if (cancelled) return
@@ -147,7 +159,7 @@ export function OpportunitiesPage() {
     return () => {
       cancelled = true
     }
-  }, [browseType, debouncedSearch, category, workArrangement, page])
+  }, [browseType, debouncedSearch, category, workArrangement, sort, page])
 
   function patchParams(patch: Record<string, string | null>) {
     const next = new URLSearchParams(searchParams)
@@ -169,6 +181,7 @@ export function OpportunitiesPage() {
     if (next === 'research') {
       nextParams.delete('category')
       nextParams.delete('work_arrangement')
+      nextParams.delete('sort')
     }
     setSearchParams(nextParams)
   }
@@ -185,7 +198,7 @@ export function OpportunitiesPage() {
   function clearFilters() {
     setSearchInput('')
     setPage(1)
-    patchParams({ q: null, category: null, work_arrangement: null, page: null })
+    patchParams({ q: null, category: null, work_arrangement: null, sort: null, page: null })
   }
 
   function goToPage(nextPage: number) {
@@ -271,6 +284,17 @@ export function OpportunitiesPage() {
               <option value="remote">Remote</option>
               <option value="hybrid">Hybrid</option>
               <option value="on_site">On-site</option>
+            </select>
+            <select
+              value={sort}
+              onChange={(e) =>
+                patchParams({ sort: e.target.value === 'newest' ? null : e.target.value, page: null })
+              }
+              aria-label="Sort opportunities"
+            >
+              <option value="newest">Newest first</option>
+              <option value="deadline">Deadline soonest</option>
+              <option value="arrangement">Remote first</option>
             </select>
           </>
         )}

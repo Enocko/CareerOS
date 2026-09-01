@@ -86,6 +86,7 @@ func ParseListFilter(values map[string][]string) ListFilter {
 		IncludeAmbiguous:    includeAmbiguous,
 		IncludeNonTechnical: includeNonTechnical,
 		CatalogScope:        scope,
+		Sort:                normalizeSort(get("sort"), scope),
 		Page:                page,
 		PerPage:             perPage,
 	}
@@ -96,4 +97,18 @@ func ParseListFilter(values map[string][]string) ListFilter {
 		filter.OpportunityType = opportunitytype.Employment
 	}
 	return filter
+}
+
+func normalizeSort(raw, scope string) string {
+	switch raw {
+	case SortDeadline, SortArrangement:
+		return raw
+	case SortNewest:
+		return SortNewest
+	default:
+		if scope == CatalogScopeResearch {
+			return ""
+		}
+		return SortNewest
+	}
 }
