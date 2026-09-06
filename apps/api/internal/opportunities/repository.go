@@ -178,7 +178,7 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 			ORDER BY org_slot ASC, %s
 			LIMIT %s OFFSET %s
 		`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere,
-			orgDiversityPartitionSQL(), orderBy, orderBy, limitArg, offsetArg)
+			orgDiversityPartitionSQL(), orderBy, diversifiedFinalOrderSQL(filter), limitArg, offsetArg)
 	} else {
 		listQuery = fmt.Sprintf(`
 			WITH ranked AS (

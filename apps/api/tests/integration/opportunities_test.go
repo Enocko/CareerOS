@@ -443,6 +443,37 @@ func insertSortableOpportunityWithTier(
 	})
 }
 
+func TestOpportunitiesBrowseNewestBeatsOlderDay(t *testing.T) {
+	router, pool := setupTestRouterWithPool(t)
+	token := registerAndGetToken(t, router)
+
+	today := time.Now().UTC()
+	yesterday := today.Add(-24 * time.Hour)
+	insertNamedSortableOpportunity(t, pool, "DAY-TEST Today Intern", "TodayCorp", "United States - Remote", "remote", today)
+	insertNamedSortableOpportunity(t, pool, "DAY-TEST Yesterday A", "OldCorpA", "United States - Remote", "remote", yesterday)
+	insertNamedSortableOpportunity(t, pool, "DAY-TEST Yesterday B", "OldCorpB", "United States - Remote", "remote", yesterday.Add(-time.Minute))
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=DAY-TEST&sort=newest&per_page=10", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("list: expected 200, got %d body=%s", rec.Code, rec.Body.String())
+	}
+
+	var resp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if len(resp.Data) < 1 {
+		t.Fatal("expected at least 1 listing")
+	}
+	first, _ := resp.Data[0]["title"].(string)
+	if first != "DAY-TEST Today Intern" {
+		t.Fatalf("expected today's new role first, got %q", first)
+	}
+}
+
 func TestOpportunitiesBrowseOrgDiversity(t *testing.T) {
 	router, pool := setupTestRouterWithPool(t)
 	token := registerAndGetToken(t, router)

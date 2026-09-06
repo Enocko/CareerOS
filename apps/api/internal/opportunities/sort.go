@@ -49,8 +49,14 @@ func freshnessOrderSQL(prefix string) string {
 	return lastChecked + " DESC NULLS LAST, " + firstSeen + " DESC, " + created + " DESC"
 }
 
+// newestOrderSQL prioritizes newly discovered roles, then recently verified ones.
+// Location preference is only a tiebreaker so overseas stacks don't bury US/remote.
 func newestOrderSQL(prefix string) string {
-	return locationPreferenceSQL(prefix) + ", " + freshnessOrderSQL(prefix)
+	firstSeen := columnRef(prefix, "first_seen_at")
+	lastChecked := columnRef(prefix, "last_checked_at")
+	created := columnRef(prefix, "created_at")
+	return firstSeen + " DESC, " + lastChecked + " DESC NULLS LAST, " +
+		locationPreferenceSQL(prefix) + ", " + created + " DESC"
 }
 
 func employmentSortSQL(prefix string, sort string) string {
@@ -121,8 +127,9 @@ func dedupedOrderBy(filter ListFilter) string {
 	}
 }
 
-// usesOrgDiversity spreads employers across browse pages so one company cannot
-// monopolize the default "newest" feed with many near-duplicate titles.
+// usesOrgDiversity spreads employers within the same discovery day so one
+// company cannot monopolize a single ingest batch, while newer days still
+// always rank above older ones.
 func usesOrgDiversity(filter ListFilter) bool {
 	if filter.CatalogScope == CatalogScopeResearch {
 		return false
@@ -135,15 +142,42 @@ func usesOrgDiversity(filter ListFilter) bool {
 	}
 }
 
+// orgDiversityPartitionSQL groups by employer + UTC discovery day so today's
+// new roles are not delayed behind yesterday's diversified page-1 fill.
 func orgDiversityPartitionSQL() string {
 	normOrg := normOrgSQL("organization_name")
 	return `CASE
 		WHEN opportunity_type = 'employment' AND ` + normOrg + ` <> ''
-		THEN ` + normOrg + `
+		THEN ` + normOrg + ` || E'\x1f' || ((first_seen_at AT TIME ZONE 'UTC')::date)::text
 		ELSE id::text
 	END`
 }
 
+// diversifiedFinalOrderSQL keeps brand-new discovery days on top, then
+// round-robins employers within that day.
+func diversifiedFinalOrderSQL(filter ListFilter) string {
+	dayBucket := `(first_seen_at AT TIME ZONE 'UTC')::date DESC`
+	withinDay := `org_slot ASC, ` + newestOrderSQL("")
+	switch filter.CatalogScope {
+	case CatalogScopeAll:
+		// Preserve research application-status priority from mixed catalog sort.
+		oppType := "opportunity_type"
+		meta := "type_metadata"
+		statusBucket := fmt.Sprintf(`CASE
+			WHEN %s = 'research' AND COALESCE(%s->>'application_status', 'unknown') = 'open' THEN 1
+			WHEN %s = 'research' AND COALESCE(%s->>'application_status', 'unknown') = 'upcoming' THEN 2
+			WHEN %s = 'employment' THEN 3
+			WHEN %s = 'research' AND COALESCE(%s->>'application_status', 'unknown') = 'unknown' THEN 4
+			WHEN %s = 'research' AND COALESCE(%s->>'application_status', 'unknown') = 'closed' THEN 5
+			ELSE 6
+		END`,
+			oppType, meta, oppType, meta, oppType, oppType, meta, oppType, meta)
+		return statusBucket + ", " + dayBucket + ", " + withinDay
+	default:
+		return dayBucket + ", " + withinDay
+	}
+}
+
 func dedupPickOrderSQL() string {
-	return `(so.id IS NOT NULL) DESC, ` + locationPreferenceSQL("o.") + `, ` + freshnessOrderSQL("o.")
+	return `(so.id IS NOT NULL) DESC, ` + newestOrderSQL("o.")
 }
