@@ -352,7 +352,69 @@ func TestOpportunitiesSortNewestFirst(t *testing.T) {
 	}
 }
 
-func insertSortableOpportunity(t *testing.T, pool *pgxpool.Pool, title string, firstSeen time.Time) {
+func TestOpportunitiesSortDeadlineDiffersFromNewest(t *testing.T) {
+	router, pool := setupTestRouterWithPool(t)
+	token := registerAndGetToken(t, router)
+
+	newerTitle := "SORT-TEST Newest Technical Intern"
+	deadlineTitle := "SORT-TEST Deadline USAJobs Intern"
+	deadline := time.Now().UTC().Add(14 * 24 * time.Hour)
+
+	insertSortableOpportunityWithTier(t, pool, newerTitle, time.Now().UTC(), "high_confidence_technical", nil)
+	insertSortableOpportunityWithTier(t, pool, deadlineTitle, time.Now().UTC().Add(-168*time.Hour), "ambiguous", &deadline)
+
+	newestReq := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=SORT-TEST&sort=newest&per_page=20", nil)
+	newestReq.Header.Set("Authorization", "Bearer "+token)
+	newestRec := httptest.NewRecorder()
+	router.ServeHTTP(newestRec, newestReq)
+	if newestRec.Code != http.StatusOK {
+		t.Fatalf("newest list: expected 200, got %d body=%s", newestRec.Code, newestRec.Body.String())
+	}
+
+	var newestResp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(newestRec.Body).Decode(&newestResp); err != nil {
+		t.Fatalf("decode newest: %v", err)
+	}
+	if len(newestResp.Data) < 1 {
+		t.Fatalf("expected at least 1 listing for newest, got %d", len(newestResp.Data))
+	}
+	newestFirst, _ := newestResp.Data[0]["title"].(string)
+	if newestFirst != newerTitle {
+		t.Fatalf("newest: expected %q first, got %q", newerTitle, newestFirst)
+	}
+
+	deadlineReq := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=SORT-TEST&sort=deadline&per_page=20", nil)
+	deadlineReq.Header.Set("Authorization", "Bearer "+token)
+	deadlineRec := httptest.NewRecorder()
+	router.ServeHTTP(deadlineRec, deadlineReq)
+	if deadlineRec.Code != http.StatusOK {
+		t.Fatalf("deadline list: expected 200, got %d body=%s", deadlineRec.Code, deadlineRec.Body.String())
+	}
+
+	var deadlineResp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(deadlineRec.Body).Decode(&deadlineResp); err != nil {
+		t.Fatalf("decode deadline: %v", err)
+	}
+	if len(deadlineResp.Data) < 2 {
+		t.Fatalf("expected at least 2 listings for deadline, got %d", len(deadlineResp.Data))
+	}
+	deadlineFirst, _ := deadlineResp.Data[0]["title"].(string)
+	if deadlineFirst != deadlineTitle {
+		t.Fatalf("deadline: expected %q first, got %q", deadlineTitle, deadlineFirst)
+	}
+	if deadlineFirst == newestFirst {
+		t.Fatal("deadline and newest sorts returned the same first result")
+	}
+}
+
+func insertSortableOpportunityWithTier(
+	t *testing.T,
+	pool *pgxpool.Pool,
+	title string,
+	firstSeen time.Time,
+	tier string,
+	deadline *time.Time,
+) {
 	t.Helper()
 	id := uuid.New()
 	externalID := "SORT-" + id.String()
@@ -364,21 +426,101 @@ func insertSortableOpportunity(t *testing.T, pool *pgxpool.Pool, title string, f
 			verification_status, first_seen_at, last_seen_at, last_checked_at,
 			status, skills, tags, missed_sync_count,
 			experience_level, career_family, education_level, relevance_tier, classification_reasons,
-			created_at, updated_at
+			created_at, updated_at, deadline
 		) VALUES (
 			$1, $2, $3, $4, 'Sort Test Corp', 'Test opportunity.',
 			'internship', 'employment', 'remote', 'https://example.com/jobs', 'https://example.com/jobs', 'USAJobs',
 			'verified', $5, $5, $5, 'open', '{}', '{integration}', 0,
-			'internship', 'software_engineering', 'unspecified', 'high_confidence_technical', '{internship}',
-			$5, $5
+			'internship', 'software_engineering', 'unspecified', $6, '{internship}',
+			$5, $5, $7
 		)
-	`, id, sourceID, externalID, title, firstSeen)
+	`, id, sourceID, externalID, title, firstSeen, tier, deadline)
 	if err != nil {
 		t.Fatalf("insert sortable opportunity: %v", err)
 	}
 	t.Cleanup(func() {
 		_, _ = pool.Exec(context.Background(), `DELETE FROM opportunities WHERE id = $1`, id)
 	})
+}
+
+func TestOpportunitiesBrowseOrgDiversity(t *testing.T) {
+	router, pool := setupTestRouterWithPool(t)
+	token := registerAndGetToken(t, router)
+
+	now := time.Now().UTC()
+	// Three near-duplicate titles from one employer, all slightly newer than Org B.
+	insertNamedSortableOpportunity(t, pool, "DIV-TEST Veeva Role A", "Veeva Systems", "India - Hyderabad", "on_site", now)
+	insertNamedSortableOpportunity(t, pool, "DIV-TEST Veeva Role B", "Veeva Systems", "India - Hyderabad", "on_site", now.Add(-time.Minute))
+	insertNamedSortableOpportunity(t, pool, "DIV-TEST Veeva Role C", "Veeva Systems", "India - Hyderabad", "on_site", now.Add(-2*time.Minute))
+	insertNamedSortableOpportunity(t, pool, "DIV-TEST Stripe Intern", "Stripe", "United States - Remote", "remote", now.Add(-3*time.Minute))
+	insertNamedSortableOpportunity(t, pool, "DIV-TEST Figma Intern", "Figma", "San Francisco, CA", "hybrid", now.Add(-4*time.Minute))
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=DIV-TEST&sort=newest&per_page=10", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("list: expected 200, got %d body=%s", rec.Code, rec.Body.String())
+	}
+
+	var resp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if len(resp.Data) < 3 {
+		t.Fatalf("expected at least 3 listings, got %d", len(resp.Data))
+	}
+
+	orgs := make([]string, 0, 3)
+	for i := 0; i < 3 && i < len(resp.Data); i++ {
+		org, _ := resp.Data[i]["organization_name"].(string)
+		orgs = append(orgs, org)
+	}
+	seen := map[string]bool{}
+	for _, org := range orgs {
+		if seen[org] {
+			t.Fatalf("expected first page slots to diversify employers, got consecutive %q in %v", org, orgs)
+		}
+		seen[org] = true
+	}
+}
+
+func insertNamedSortableOpportunity(
+	t *testing.T,
+	pool *pgxpool.Pool,
+	title, org, location, arrangement string,
+	firstSeen time.Time,
+) {
+	t.Helper()
+	id := uuid.New()
+	externalID := "SORT-" + id.String()
+	sourceID := "c3000000-0000-4000-8000-000000000001"
+	_, err := pool.Exec(context.Background(), `
+		INSERT INTO opportunities (
+			id, source_id, external_id, title, organization_name, description,
+			category, opportunity_type, work_arrangement, location, application_url, source_url, source,
+			verification_status, first_seen_at, last_seen_at, last_checked_at,
+			status, skills, tags, missed_sync_count,
+			experience_level, career_family, education_level, relevance_tier, classification_reasons,
+			created_at, updated_at
+		) VALUES (
+			$1, $2, $3, $4, $5, 'Test opportunity.',
+			'internship', 'employment', $6, $7, 'https://example.com/jobs', 'https://example.com/jobs', 'Lever',
+			'verified', $8, $8, $8, 'open', '{}', '{integration}', 0,
+			'internship', 'software_engineering', 'unspecified', 'high_confidence_technical', '{internship}',
+			$8, $8
+		)
+	`, id, sourceID, externalID, title, org, arrangement, location, firstSeen)
+	if err != nil {
+		t.Fatalf("insert named sortable opportunity: %v", err)
+	}
+	t.Cleanup(func() {
+		_, _ = pool.Exec(context.Background(), `DELETE FROM opportunities WHERE id = $1`, id)
+	})
+}
+
+func insertSortableOpportunity(t *testing.T, pool *pgxpool.Pool, title string, firstSeen time.Time) {
+	insertSortableOpportunityWithTier(t, pool, title, firstSeen, "high_confidence_technical", nil)
 }
 
 // Ensure bytes import is used by other tests in package

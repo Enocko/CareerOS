@@ -74,6 +74,14 @@ func ParseListFilter(values map[string][]string) ListFilter {
 		}
 	}
 
+	sort := normalizeSort(get("sort"), scope)
+
+	// Deadline-bearing listings (mostly USAJobs) often land in the ambiguous tier.
+	// Without them, deadline sort ties on NULL and matches newest-first order.
+	if sort == SortDeadline {
+		includeAmbiguous = true
+	}
+
 	filter := ListFilter{
 		Query:               get("q"),
 		Category:            get("category"),
@@ -86,7 +94,7 @@ func ParseListFilter(values map[string][]string) ListFilter {
 		IncludeAmbiguous:    includeAmbiguous,
 		IncludeNonTechnical: includeNonTechnical,
 		CatalogScope:        scope,
-		Sort:                normalizeSort(get("sort"), scope),
+		Sort:                sort,
 		Page:                page,
 		PerPage:             perPage,
 	}

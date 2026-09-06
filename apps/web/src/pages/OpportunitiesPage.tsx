@@ -311,7 +311,7 @@ export function OpportunitiesPage() {
               aria-label="Sort opportunities"
               title="Sort opportunities"
             >
-              <option value="newest">Sort: newest first</option>
+              <option value="newest">Sort: newest & diverse</option>
               <option value="deadline">Sort: deadline soonest</option>
               <option value="arrangement">Sort: remote first</option>
             </select>

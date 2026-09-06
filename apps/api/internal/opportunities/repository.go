@@ -137,36 +137,80 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 
 	orderBy := dedupedOrderBy(filter)
 
-	listQuery := fmt.Sprintf(`
-		WITH ranked AS (
-			SELECT o.id, o.title, o.organization_name, o.category, o.opportunity_type,
-			       o.verification_method, o.employment_mode, o.location,
-			       o.work_arrangement, o.deadline, o.skills, o.tags, o.status,
-			       o.verification_status, o.source, o.last_checked_at,
-			       o.experience_level, o.career_family, o.relevance_tier,
-			       o.type_metadata, o.created_at, o.first_seen_at,
-			       (so.id IS NOT NULL) AS is_saved,
-			       ROW_NUMBER() OVER (
-			           PARTITION BY %s
-			           ORDER BY %s
-			       ) AS pick_rank,
-			       COUNT(*) OVER (PARTITION BY %s) AS listing_count
-			FROM opportunities o
-			LEFT JOIN saved_opportunities so
-				ON so.opportunity_id = o.id AND so.student_id = $1
-			WHERE %s
-		)
-		SELECT id, title, organization_name, category, opportunity_type,
-		       verification_method, employment_mode, location,
-		       work_arrangement, deadline, skills, tags, status,
-		       verification_status, source, last_checked_at,
-		       experience_level, career_family, relevance_tier,
-		       type_metadata, is_saved, listing_count
-		FROM ranked
-		WHERE pick_rank = 1
-		ORDER BY %s
-		LIMIT %s OFFSET %s
-	`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere, orderBy, limitArg, offsetArg)
+	var listQuery string
+	if usesOrgDiversity(filter) {
+		// Round-robin by employer so page 1 is a diverse mix, not 12 variants from one company.
+		listQuery = fmt.Sprintf(`
+			WITH ranked AS (
+				SELECT o.id, o.title, o.organization_name, o.category, o.opportunity_type,
+				       o.verification_method, o.employment_mode, o.location,
+				       o.work_arrangement, o.deadline, o.skills, o.tags, o.status,
+				       o.verification_status, o.source, o.last_checked_at,
+				       o.experience_level, o.career_family, o.relevance_tier,
+				       o.type_metadata, o.created_at, o.first_seen_at,
+				       (so.id IS NOT NULL) AS is_saved,
+				       ROW_NUMBER() OVER (
+				           PARTITION BY %s
+				           ORDER BY %s
+				       ) AS pick_rank,
+				       COUNT(*) OVER (PARTITION BY %s) AS listing_count
+				FROM opportunities o
+				LEFT JOIN saved_opportunities so
+					ON so.opportunity_id = o.id AND so.student_id = $1
+				WHERE %s
+			),
+			diversified AS (
+				SELECT *,
+				       ROW_NUMBER() OVER (
+				           PARTITION BY %s
+				           ORDER BY %s
+				       ) AS org_slot
+				FROM ranked
+				WHERE pick_rank = 1
+			)
+			SELECT id, title, organization_name, category, opportunity_type,
+			       verification_method, employment_mode, location,
+			       work_arrangement, deadline, skills, tags, status,
+			       verification_status, source, last_checked_at,
+			       experience_level, career_family, relevance_tier,
+			       type_metadata, is_saved, listing_count
+			FROM diversified
+			ORDER BY org_slot ASC, %s
+			LIMIT %s OFFSET %s
+		`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere,
+			orgDiversityPartitionSQL(), orderBy, orderBy, limitArg, offsetArg)
+	} else {
+		listQuery = fmt.Sprintf(`
+			WITH ranked AS (
+				SELECT o.id, o.title, o.organization_name, o.category, o.opportunity_type,
+				       o.verification_method, o.employment_mode, o.location,
+				       o.work_arrangement, o.deadline, o.skills, o.tags, o.status,
+				       o.verification_status, o.source, o.last_checked_at,
+				       o.experience_level, o.career_family, o.relevance_tier,
+				       o.type_metadata, o.created_at, o.first_seen_at,
+				       (so.id IS NOT NULL) AS is_saved,
+				       ROW_NUMBER() OVER (
+				           PARTITION BY %s
+				           ORDER BY %s
+				       ) AS pick_rank,
+				       COUNT(*) OVER (PARTITION BY %s) AS listing_count
+				FROM opportunities o
+				LEFT JOIN saved_opportunities so
+					ON so.opportunity_id = o.id AND so.student_id = $1
+				WHERE %s
+			)
+			SELECT id, title, organization_name, category, opportunity_type,
+			       verification_method, employment_mode, location,
+			       work_arrangement, deadline, skills, tags, status,
+			       verification_status, source, last_checked_at,
+			       experience_level, career_family, relevance_tier,
+			       type_metadata, is_saved, listing_count
+			FROM ranked
+			WHERE pick_rank = 1
+			ORDER BY %s
+			LIMIT %s OFFSET %s
+		`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere, orderBy, limitArg, offsetArg)
+	}
 
 	rows, err := r.pool.Query(ctx, listQuery, listArgs...)
 	if err != nil {

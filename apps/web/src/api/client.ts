@@ -48,6 +48,13 @@ class ApiClient {
       if (err instanceof DOMException && err.name === 'AbortError') {
         throw new Error('Request timed out. The server may be waking up — try again in a moment.')
       }
+      if (err instanceof TypeError) {
+        const localHint =
+          !API_BASE && import.meta.env.DEV
+            ? ' Start the API with: make up && make api-run'
+            : ''
+        throw new Error(`Cannot reach the API server.${localHint}`)
+      }
       throw err
     } finally {
       window.clearTimeout(timeout)
@@ -63,7 +70,11 @@ class ApiClient {
     const text = await response.text()
     if (!text) {
       if (!response.ok) {
-        throw new Error('Request failed')
+        const localHint =
+          !API_BASE && import.meta.env.DEV
+            ? ' Is the API running? Try: make up && make api-run'
+            : ''
+        throw new Error(`Request failed (${response.status}).${localHint}`)
       }
       return undefined as T
     }
