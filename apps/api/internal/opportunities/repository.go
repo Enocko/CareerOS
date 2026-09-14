@@ -343,7 +343,7 @@ func (r *Repository) Exists(ctx context.Context, opportunityID uuid.UUID) (bool,
 }
 
 func buildListWhere(filter ListFilter, startIndex int) (string, []any) {
-	conditions := []string{"o.status = 'open'"}
+	conditions := []string{"o.status = 'open'", activeDeadlineCondition("o.")}
 	args := []any{}
 	argIndex := startIndex
 

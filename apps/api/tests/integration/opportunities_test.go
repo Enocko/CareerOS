@@ -95,6 +95,46 @@ func TestOpportunitiesListAndDetail(t *testing.T) {
 	}
 }
 
+func TestOpportunitiesHidePastDeadline(t *testing.T) {
+	router, pool := setupTestRouterWithPool(t)
+	token := registerAndGetToken(t, router)
+
+	openTitle := "DEADLINE-HIDE Open Intern"
+	expiredTitle := "DEADLINE-HIDE Expired Intern"
+	past := time.Now().UTC().Add(-48 * time.Hour)
+	insertSortableOpportunityWithTier(t, pool, openTitle, time.Now().UTC(), "high_confidence_technical", nil)
+	insertSortableOpportunityWithTier(t, pool, expiredTitle, time.Now().UTC(), "high_confidence_technical", &past)
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities?type=employment&q=DEADLINE-HIDE&per_page=20", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("list: expected 200, got %d body=%s", rec.Code, rec.Body.String())
+	}
+
+	var resp platform.PaginatedResponse[map[string]any]
+	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	for _, item := range resp.Data {
+		title, _ := item["title"].(string)
+		if title == expiredTitle {
+			t.Fatal("expected past-deadline listing to be hidden from browse")
+		}
+	}
+	foundOpen := false
+	for _, item := range resp.Data {
+		title, _ := item["title"].(string)
+		if title == openTitle {
+			foundOpen = true
+		}
+	}
+	if !foundOpen {
+		t.Fatal("expected still-open listing to remain in browse")
+	}
+}
+
 func TestOpportunitiesHidesUnverifiedSeedByDefault(t *testing.T) {
 	router, pool := setupTestRouterWithPool(t)
 	token := registerAndGetToken(t, router)

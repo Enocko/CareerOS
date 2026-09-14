@@ -40,3 +40,9 @@ func researchOrderBy() string {
 func researchVisibilityCondition() string {
 	return "o.opportunity_type = 'research'"
 }
+
+// activeDeadlineCondition hides listings whose apply-by date has already passed.
+func activeDeadlineCondition(prefix string) string {
+	deadline := prefix + "deadline"
+	return "(" + deadline + " IS NULL OR " + deadline + " >= CURRENT_DATE)"
+}

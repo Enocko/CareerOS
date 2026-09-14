@@ -36,6 +36,7 @@ func (r *Repository) ListCandidates(ctx context.Context, studentID uuid.UUID) ([
 			ON so.opportunity_id = o.id AND so.student_id = $1
 		WHERE o.status = 'open'
 		  AND o.verification_status = 'verified'
+		  AND (o.deadline IS NULL OR o.deadline >= CURRENT_DATE)
 		  AND o.opportunity_type = 'employment'
 		  AND o.relevance_tier = 'high_confidence_technical'
 		  AND (

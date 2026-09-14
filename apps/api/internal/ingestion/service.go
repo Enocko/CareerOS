@@ -24,6 +24,12 @@ func NewService(repo *Repository, adapters map[string]AdapterFactory) *Service {
 
 // RunAll ingests from all enabled sources sequentially.
 func (s *Service) RunAll(ctx context.Context) ([]RunResult, error) {
+	if closed, err := s.repo.CloseExpiredDeadlines(ctx, time.Now().UTC()); err != nil {
+		slog.Error("failed to close expired-deadline listings", "error", err)
+	} else if closed > 0 {
+		slog.Info("closed listings past their application deadline", "count", closed)
+	}
+
 	sources, err := s.repo.ListEnabledSources(ctx)
 	if err != nil {
 		return nil, err

@@ -11,6 +11,7 @@ import (
 
 	"github.com/careeros/api/internal/config"
 	"github.com/careeros/api/internal/db"
+	"github.com/careeros/api/internal/ingestion"
 	"github.com/careeros/api/internal/observability"
 	"github.com/careeros/api/internal/server"
 )
@@ -31,6 +32,13 @@ func main() {
 		os.Exit(1)
 	}
 	defer pool.Close()
+
+	ingestRepo := ingestion.NewRepository(pool)
+	if closed, err := ingestRepo.CloseExpiredDeadlines(ctx, time.Now().UTC()); err != nil {
+		slog.Error("failed to close expired-deadline listings on startup", "error", err)
+	} else if closed > 0 {
+		slog.Info("closed listings past their application deadline", "count", closed)
+	}
 
 	router := server.NewRouter(cfg, pool)
 

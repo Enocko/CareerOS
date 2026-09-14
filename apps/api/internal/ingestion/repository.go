@@ -301,8 +301,7 @@ func (r *Repository) ApplyPostSyncActions(
 		  AND status = 'open'
 		  AND deadline IS NOT NULL
 		  AND deadline < ($3::timestamptz)::date
-		  AND NOT (external_id = ANY($6))
-	`, sourceID, VerificationVerified, now, VerificationClosed, VerificationStale, seenExternalIDs)
+	`, sourceID, VerificationVerified, now, VerificationClosed, VerificationStale)
 	if err != nil {
 		return 0, 0, fmt.Errorf("close expired deadlines: %w", err)
 	}
@@ -312,6 +311,23 @@ func (r *Repository) ApplyPostSyncActions(
 		return 0, 0, fmt.Errorf("commit post-sync tx: %w", err)
 	}
 	return staleCount, closedCount, nil
+}
+
+// CloseExpiredDeadlines marks every open listing past its apply-by date as closed.
+func (r *Repository) CloseExpiredDeadlines(ctx context.Context, now time.Time) (int, error) {
+	tag, err := r.pool.Exec(ctx, `
+		UPDATE opportunities
+		SET status = 'closed',
+		    verification_status = $2,
+		    updated_at = $1
+		WHERE status = 'open'
+		  AND deadline IS NOT NULL
+		  AND deadline < ($1::timestamptz)::date
+	`, now, VerificationClosed)
+	if err != nil {
+		return 0, fmt.Errorf("close expired deadlines: %w", err)
+	}
+	return int(tag.RowsAffected()), nil
 }
 
 // CountVerifiedBySource returns the number of verified open opportunities for a source.

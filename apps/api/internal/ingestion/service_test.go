@@ -948,7 +948,7 @@ func TestDifferentExternalIDDoesNotReopenClosedOpportunity(t *testing.T) {
 	}
 }
 
-func TestSeenListingWithExpiredDeadlineStaysOpen(t *testing.T) {
+func TestSeenListingWithExpiredDeadlineIsClosed(t *testing.T) {
 	repo := testPool(t)
 	ctx := context.Background()
 	sourceID := setupIsolatedTestSource(t, repo)
@@ -990,7 +990,7 @@ func TestSeenListingWithExpiredDeadlineStaysOpen(t *testing.T) {
 	if err != nil {
 		t.Fatalf("get lifecycle: %v", err)
 	}
-	if status != "open" || verification != VerificationVerified {
-		t.Fatalf("expected authoritative listing to remain open/verified, got %s/%s", status, verification)
+	if status != "closed" || verification != VerificationClosed {
+		t.Fatalf("expected expired listing to be closed, got %s/%s", status, verification)
 	}
 }
