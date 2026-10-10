@@ -1,7 +1,7 @@
 .PHONY: up down logs migrate migrate-down db-shell clean api-run api-test api-build ingest web-install web-run web-build
 
 COMPOSE_FILE = infrastructure/docker/docker-compose.yml
-GO           = $(HOME)/.local/go/bin/go
+GO          ?= $(shell command -v go 2>/dev/null || echo $(HOME)/.local/go/bin/go)
 API_DIR      = apps/api
 WEB_DIR      = apps/web
 

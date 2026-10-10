@@ -37,6 +37,7 @@ apps/api/bin/
 apps/web/node_modules/
 apps/web/dist/
 apps/web/npm-cache/
+*.tsbuildinfo
 
 # Docker volumes
 postgres_data/
