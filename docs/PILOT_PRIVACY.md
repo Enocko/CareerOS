@@ -30,7 +30,8 @@ Opportunity listings are ingested from public sources (USAJobs, employer ATS boa
 ## Access controls
 
 - Students can only access their own profile, saves, applications, and notifications.
-- Admin routes require email allowlist (`CAREEROS_ADMIN_EMAILS`).
+- Admin routes require a user ID or email allowlist (`CAREEROS_ADMIN_USER_IDS`, `CAREEROS_ADMIN_EMAILS`).
+- Logout revokes the session token server-side; it cannot be reused afterwards.
 
 ## Deletion requests
 

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/careeros/api/internal/auth"
@@ -54,11 +55,20 @@ func isStateChanging(method string) bool {
 	}
 }
 
+// originMatchesAllowed reports whether origin (an Origin or Referer value) has
+// exactly the same scheme and host as allowed. Prefix matching is unsafe: it
+// would accept https://app.example.com.evil.com for https://app.example.com.
 func originMatchesAllowed(origin, allowed string) bool {
 	if allowed == "" || allowed == "*" {
 		return false
 	}
-	origin = strings.TrimRight(origin, "/")
-	allowed = strings.TrimRight(allowed, "/")
-	return strings.HasPrefix(origin, allowed)
+	o, err := url.Parse(strings.TrimSpace(origin))
+	if err != nil || o.Scheme == "" || o.Host == "" {
+		return false
+	}
+	a, err := url.Parse(strings.TrimSpace(allowed))
+	if err != nil || a.Scheme == "" || a.Host == "" {
+		return false
+	}
+	return strings.EqualFold(o.Scheme, a.Scheme) && strings.EqualFold(o.Host, a.Host)
 }

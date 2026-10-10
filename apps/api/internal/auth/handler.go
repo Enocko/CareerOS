@@ -61,6 +61,12 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 // Logout handles POST /api/v1/auth/logout.
 func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
 	ClearSessionCookie(w, h.cookieConfig)
+	if session, ok := SessionFromContext(r.Context()); ok {
+		if err := h.service.Logout(r.Context(), session); err != nil {
+			platform.WriteError(w, err)
+			return
+		}
+	}
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -86,6 +92,13 @@ type contextKey string
 
 const UserIDKey contextKey = "user_id"
 const UserEmailKey contextKey = "user_email"
+const sessionKey contextKey = "session"
+
+// Session identifies the token that authenticated the current request.
+type Session struct {
+	TokenID   string
+	ExpiresAt time.Time
+}
 
 // UserIDFromContext extracts the authenticated user ID from context.
 func UserIDFromContext(ctx context.Context) (uuid.UUID, bool) {
@@ -102,6 +115,17 @@ func UserEmailFromContext(ctx context.Context) (string, bool) {
 // WithUserID adds a user ID to the context.
 func WithUserID(ctx context.Context, id uuid.UUID) context.Context {
 	return context.WithValue(ctx, UserIDKey, id)
+}
+
+// WithSession adds the authenticating token's identity to the context.
+func WithSession(ctx context.Context, s Session) context.Context {
+	return context.WithValue(ctx, sessionKey, s)
+}
+
+// SessionFromContext returns the authenticating token's identity.
+func SessionFromContext(ctx context.Context) (Session, bool) {
+	s, ok := ctx.Value(sessionKey).(Session)
+	return s, ok
 }
 
 // WithUserEmail adds a user email to the context.

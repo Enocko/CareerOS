@@ -15,6 +15,7 @@ import (
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/platform"
 	"github.com/careeros/api/internal/server"
+	"github.com/careeros/api/internal/testutil"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -30,7 +31,7 @@ func setupTestRouterWithAdminPool(t *testing.T, adminEmails []string) (http.Hand
 	ctx := context.Background()
 	pool, err := db.Connect(ctx, databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	t.Cleanup(func() { pool.Close() })
 

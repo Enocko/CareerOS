@@ -64,3 +64,32 @@ func TestLoad_InvalidLogLevel(t *testing.T) {
 		t.Fatalf("expected LOG_LEVEL error, got %v", err)
 	}
 }
+
+func TestLoad_AdminUserIDs(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://careeros:careeros@localhost:5433/careeros?sslmode=disable")
+	t.Setenv("JWT_SECRET", "test-secret-at-least-16-chars")
+	t.Setenv("CAREEROS_ADMIN_USER_IDS", " 3f2504e0-4f89-11d3-9a0c-0305e82c3301 , ")
+
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(cfg.AdminUserIDs) != 1 || cfg.AdminUserIDs[0].String() != "3f2504e0-4f89-11d3-9a0c-0305e82c3301" {
+		t.Fatalf("unexpected admin IDs: %v", cfg.AdminUserIDs)
+	}
+
+	t.Setenv("CAREEROS_ADMIN_USER_IDS", "not-a-uuid")
+	if _, err := Load(); err == nil || !strings.Contains(err.Error(), "CAREEROS_ADMIN_USER_IDS") {
+		t.Fatalf("expected admin ID parse error, got %v", err)
+	}
+}
+
+func TestLoad_NegativeTrustedProxyHops(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://careeros:careeros@localhost:5433/careeros?sslmode=disable")
+	t.Setenv("JWT_SECRET", "test-secret-at-least-16-chars")
+	t.Setenv("TRUSTED_PROXY_HOPS", "-1")
+
+	if _, err := Load(); err == nil || !strings.Contains(err.Error(), "TRUSTED_PROXY_HOPS") {
+		t.Fatalf("expected TRUSTED_PROXY_HOPS error, got %v", err)
+	}
+}

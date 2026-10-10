@@ -39,8 +39,18 @@ services:
         value: None
       - key: METRICS_ENABLED
         value: false
+      # Admin allowlists are set in the Render dashboard, not committed here.
+      # Prefer user IDs: an ID only exists after its owner registers, so it
+      # cannot be claimed by someone else (emails are not verified).
+      - key: CAREEROS_ADMIN_USER_IDS
+        sync: false
       - key: CAREEROS_ADMIN_EMAILS
-        value: enockowusuansah02@gmail.com
+        sync: false
+      # Render's proxies append to X-Forwarded-For; this many trailing entries are
+      # trusted when resolving the client IP for rate limiting. Verify after deploy:
+      # the "client_ip" field in request logs should show your own public IP.
+      - key: TRUSTED_PROXY_HOPS
+        value: 3
       - key: USAJOBS_API_KEY
         sync: false
       - key: USAJOBS_USER_AGENT

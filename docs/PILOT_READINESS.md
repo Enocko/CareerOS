@@ -42,7 +42,9 @@ Blueprint: [`render.yaml`](../render.yaml)
 | `JWT_SECRET` | Yes | ≥16 chars; never use example value in production |
 | `CAREEROS_ENV` | Yes | Set `production` in deployed environments |
 | `CORS_ORIGIN` | Yes | Exact frontend URL (no `*` in production) |
-| `CAREEROS_ADMIN_EMAILS` | Yes | Comma-separated admin emails |
+| `CAREEROS_ADMIN_USER_IDS` | One of | Comma-separated admin user IDs (preferred — cannot be claimed by another account) |
+| `CAREEROS_ADMIN_EMAILS` | One of | Comma-separated admin emails. Emails are not verified: only list an address after its owner has registered |
+| `TRUSTED_PROXY_HOPS` | Prod | Proxies that append to `X-Forwarded-For` (`3` on Render). Check the `client_ip` log field shows real client IPs |
 | `COOKIE_SECURE` | Prod | `true` when HTTPS |
 | `COOKIE_SAMESITE` | Prod | `None` for cross-origin API + frontend |
 | `VITE_API_URL` | Build | API URL baked into frontend at build time |
@@ -57,7 +59,7 @@ See [`.env.example`](../.env.example).
 
 1. Create Render account and connect GitHub repo
 2. Apply `render.yaml` blueprint (or create services manually)
-3. Set sync=false secrets: `CORS_ORIGIN`, `VITE_API_URL`, `CAREEROS_ADMIN_EMAILS`, `USAJOBS_*`
+3. Set sync=false secrets: `CORS_ORIGIN`, `VITE_API_URL`, `CAREEROS_ADMIN_USER_IDS` / `CAREEROS_ADMIN_EMAILS`, `USAJOBS_*`
 4. Run migrations: `./scripts/migrate.sh up` (pre-deploy on API service)
 5. Deploy API → worker → scheduler → frontend (set `VITE_API_URL` before web build)
 6. Run initial ingestion: Render shell on worker or one-off job: `make ingest`
@@ -104,7 +106,8 @@ Passwords and tokens are never logged.
 |---------|--------------|--------|
 | `empty_sync_anomaly` | First unexpected zero-result sync | Wait for second consecutive exhaustive empty sync; check board token |
 | `incomplete_sync` | Pagination/parse failure | Check provider logs, adapter errors |
-| 403 on admin | Email not in `CAREEROS_ADMIN_EMAILS` | Update env, redeploy |
+| 403 on admin | User not in `CAREEROS_ADMIN_USER_IDS` / `CAREEROS_ADMIN_EMAILS` | Update env, redeploy |
+| Everyone gets 429 on login | `TRUSTED_PROXY_HOPS` too low, so all users share the proxy IP | Compare `client_ip` in logs with your real IP; adjust |
 | CORS errors | `CORS_ORIGIN` mismatch | Match exact frontend URL |
 | Cookie auth fails cross-origin | `COOKIE_SAMESITE` / `COOKIE_SECURE` | Use `None` + `Secure` with HTTPS |
 | No opportunities | Ingestion not run | `make ingest`, check scheduler |

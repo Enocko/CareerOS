@@ -11,6 +11,7 @@ import (
 	"github.com/careeros/api/internal/ingestion"
 	"github.com/careeros/api/internal/jobs"
 	"github.com/careeros/api/internal/notifications"
+	"github.com/careeros/api/internal/testutil"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -31,7 +32,7 @@ func TestReminderWindowsEnqueue7DayApplication(t *testing.T) {
 	pool := testPool(t)
 	ctx := context.Background()
 	now := time.Date(2026, 8, 30, 12, 0, 0, 0, time.UTC)
-	deadline := now.UTC().Truncate(24 * time.Hour).AddDate(0, 0, 7)
+	deadline := now.UTC().Truncate(24*time.Hour).AddDate(0, 0, 7)
 
 	userID := insertReminderUser(t, pool)
 	oppID := insertReminderOpportunity(t, pool, deadline, "open", true)
@@ -80,7 +81,7 @@ func TestNoReminderForClosedOpportunity(t *testing.T) {
 	pool := testPool(t)
 	ctx := context.Background()
 	now := time.Date(2026, 8, 30, 12, 0, 0, 0, time.UTC)
-	deadline := now.UTC().Truncate(24 * time.Hour).AddDate(0, 0, 3)
+	deadline := now.UTC().Truncate(24*time.Hour).AddDate(0, 0, 3)
 
 	userID := insertReminderUser(t, pool)
 	oppID := insertReminderOpportunity(t, pool, deadline, "closed", true)
@@ -123,7 +124,7 @@ func TestSavedReminderExcludedWhenApplicationExists(t *testing.T) {
 	pool := testPool(t)
 	ctx := context.Background()
 	now := time.Date(2026, 8, 30, 12, 0, 0, 0, time.UTC)
-	deadline := now.UTC().Truncate(24 * time.Hour).AddDate(0, 0, 1)
+	deadline := now.UTC().Truncate(24*time.Hour).AddDate(0, 0, 1)
 
 	userID := insertReminderUser(t, pool)
 	oppID := insertReminderOpportunity(t, pool, deadline, "open", true)
@@ -203,7 +204,7 @@ func testPool(t *testing.T) *pgxpool.Pool {
 	}
 	pool, err := db.Connect(context.Background(), databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	t.Cleanup(func() { pool.Close() })
 	return pool

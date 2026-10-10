@@ -15,6 +15,7 @@ import (
 	"github.com/careeros/api/internal/config"
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/server"
+	"github.com/careeros/api/internal/testutil"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -34,7 +35,7 @@ func setupTestRouterWithPool(t *testing.T) (http.Handler, *pgxpool.Pool) {
 	ctx := context.Background()
 	pool, err := db.Connect(ctx, databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	t.Cleanup(func() { pool.Close() })
 
@@ -181,5 +182,34 @@ func TestAuthRegisterValidation(t *testing.T) {
 
 	if rec.Code != http.StatusBadRequest {
 		t.Fatalf("expected 400, got %d body=%s", rec.Code, rec.Body.String())
+	}
+}
+
+func TestAuthLogoutRevokesToken(t *testing.T) {
+	router := setupTestRouter(t)
+	token := registerAndGetTokenWithEmail(t, router, uniqueEmail(t), "securepass123")
+
+	me := func() int {
+		req := httptest.NewRequest(http.MethodGet, "/api/v1/auth/me", nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		rec := httptest.NewRecorder()
+		router.ServeHTTP(rec, req)
+		return rec.Code
+	}
+
+	if code := me(); code != http.StatusOK {
+		t.Fatalf("me before logout: expected 200, got %d", code)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/logout", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	if rec.Code != http.StatusNoContent {
+		t.Fatalf("logout: expected 204, got %d body=%s", rec.Code, rec.Body.String())
+	}
+
+	if code := me(); code != http.StatusUnauthorized {
+		t.Fatalf("me after logout: expected 401 for revoked token, got %d", code)
 	}
 }

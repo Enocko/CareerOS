@@ -5,6 +5,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 // Config holds all environment-based configuration for the API server.
@@ -16,11 +18,15 @@ type Config struct {
 	LogLevel       string
 	CORSOrigin     string
 	AdminEmails    []string
+	AdminUserIDs   []uuid.UUID
 	Environment    string
 	CookieSecure   bool
 	CookieSameSite string
 	MetricsEnabled bool
 	MetricsToken   string
+	// TrustedProxyHops is how many reverse proxies in front of the API append
+	// to X-Forwarded-For. 0 means the API is reached directly.
+	TrustedProxyHops int
 }
 
 // IngestConfig holds configuration for the ingestion CLI.
@@ -48,7 +54,15 @@ func Load() (*Config, error) {
 		CookieSameSite: envOrDefault("COOKIE_SAMESITE", defaultCookieSameSite(os.Getenv("CAREEROS_ENV"))),
 		MetricsEnabled: envBoolOrDefault("METRICS_ENABLED", os.Getenv("CAREEROS_ENV") != "production"),
 		MetricsToken:   os.Getenv("METRICS_TOKEN"),
+
+		TrustedProxyHops: envIntOrDefault("TRUSTED_PROXY_HOPS", 0),
 	}
+
+	adminIDs, err := parseUUIDList(os.Getenv("CAREEROS_ADMIN_USER_IDS"))
+	if err != nil {
+		return nil, fmt.Errorf("CAREEROS_ADMIN_USER_IDS: %w", err)
+	}
+	cfg.AdminUserIDs = adminIDs
 
 	if err := cfg.Validate(); err != nil {
 		return nil, err
@@ -94,6 +108,9 @@ func (c *Config) Validate() error {
 	}
 	if c.JWTExpiryHours <= 0 {
 		return fmt.Errorf("JWT_EXPIRY_HOURS must be positive")
+	}
+	if c.TrustedProxyHops < 0 {
+		return fmt.Errorf("TRUSTED_PROXY_HOPS must not be negative")
 	}
 
 	switch strings.ToLower(c.LogLevel) {
@@ -171,6 +188,30 @@ func (c *Config) AdminEmailSet() map[string]struct{} {
 	set := make(map[string]struct{}, len(c.AdminEmails))
 	for _, email := range c.AdminEmails {
 		set[email] = struct{}{}
+	}
+	return set
+}
+
+func parseUUIDList(raw string) ([]uuid.UUID, error) {
+	var out []uuid.UUID
+	for _, p := range strings.Split(raw, ",") {
+		p = strings.TrimSpace(p)
+		if p == "" {
+			continue
+		}
+		id, err := uuid.Parse(p)
+		if err != nil {
+			return nil, fmt.Errorf("invalid user ID %q", p)
+		}
+		out = append(out, id)
+	}
+	return out, nil
+}
+
+func (c *Config) AdminUserIDSet() map[uuid.UUID]struct{} {
+	set := make(map[uuid.UUID]struct{}, len(c.AdminUserIDs))
+	for _, id := range c.AdminUserIDs {
+		set[id] = struct{}{}
 	}
 	return set
 }

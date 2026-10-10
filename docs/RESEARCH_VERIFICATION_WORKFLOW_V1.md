@@ -145,7 +145,7 @@ No per-cycle save rows required.
 
 ## 13. Admin / internal workflow
 
-Routes (require auth + `CAREEROS_ADMIN_EMAILS`):
+Routes (require auth + `CAREEROS_ADMIN_USER_IDS` or `CAREEROS_ADMIN_EMAILS`):
 
 - `GET /api/v1/admin/research/queue` — prioritized candidates
 - `GET /api/v1/admin/research/metrics` — catalog counts

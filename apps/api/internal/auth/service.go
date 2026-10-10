@@ -97,6 +97,17 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*AuthResponse, e
 	return &AuthResponse{User: resp, Token: token}, nil
 }
 
+// Logout revokes the session token so it cannot be reused before it expires.
+func (s *Service) Logout(ctx context.Context, session Session) error {
+	if session.TokenID == "" {
+		return nil
+	}
+	if err := s.repo.RevokeToken(ctx, session.TokenID, session.ExpiresAt); err != nil {
+		return platform.InternalError()
+	}
+	return nil
+}
+
 // GetUser returns the authenticated user's public profile.
 func (s *Service) GetUser(ctx context.Context, userID uuid.UUID) (*UserResponse, error) {
 	user, err := s.repo.GetUserByID(ctx, userID)

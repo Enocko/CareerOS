@@ -9,6 +9,7 @@ import (
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/profile"
 	"github.com/careeros/api/internal/recommendation"
+	"github.com/careeros/api/internal/testutil"
 	"github.com/google/uuid"
 )
 
@@ -20,7 +21,7 @@ func TestRecommendationLatency(t *testing.T) {
 	ctx := context.Background()
 	pool, err := db.Connect(ctx, databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	defer pool.Close()
 

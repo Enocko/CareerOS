@@ -9,6 +9,7 @@ import (
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/jobs"
 	"github.com/careeros/api/internal/notifications"
+	"github.com/careeros/api/internal/testutil"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -21,7 +22,7 @@ func testPool(t *testing.T) *pgxpool.Pool {
 	}
 	pool, err := db.Connect(context.Background(), databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	t.Cleanup(func() { pool.Close() })
 	return pool

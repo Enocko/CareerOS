@@ -10,6 +10,7 @@ import (
 
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/ingestion/ingestrecord"
+	"github.com/careeros/api/internal/testutil"
 	"github.com/google/uuid"
 )
 
@@ -47,7 +48,7 @@ func testPool(t *testing.T) *Repository {
 	}
 	pool, err := db.Connect(context.Background(), databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	t.Cleanup(func() { pool.Close() })
 	return NewRepository(pool)
@@ -257,10 +258,10 @@ func TestResearchIngestionUpsertIdempotent(t *testing.T) {
 	cleanupTestOpportunity(t, repo, sourceID, externalID)
 
 	meta, _ := json.Marshal(map[string]any{
-		"research_area":                      "Quantum Computing",
-		"duration_weeks":                     10,
-		"application_status":                 "unknown",
-		"application_status_method":          "nsf_award_only",
+		"research_area":                    "Quantum Computing",
+		"duration_weeks":                   10,
+		"application_status":               "unknown",
+		"application_status_method":        "nsf_award_only",
 		"availability_verification_method": "unknown",
 	})
 	service := NewService(repo, map[string]AdapterFactory{
@@ -269,7 +270,7 @@ func TestResearchIngestionUpsertIdempotent(t *testing.T) {
 				ExternalID:         externalID,
 				Title:              "REU Site: Quantum Computing",
 				Organization:       "Test University",
-				Description:         "NSF REU Site supporting undergraduate researchers for 10 weeks.",
+				Description:        "NSF REU Site supporting undergraduate researchers for 10 weeks.",
 				Category:           "research",
 				Location:           "Boston, MA",
 				ApplicationURL:     "https://example.edu/reu/apply",

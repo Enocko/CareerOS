@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/careeros/api/internal/admin"
 	"github.com/careeros/api/internal/applications"
 	"github.com/careeros/api/internal/auth"
 	"github.com/careeros/api/internal/config"
-	"github.com/careeros/api/internal/admin"
 	"github.com/careeros/api/internal/middleware"
+	"github.com/careeros/api/internal/notifications"
 	"github.com/careeros/api/internal/observability"
 	"github.com/careeros/api/internal/opportunities"
 	"github.com/careeros/api/internal/opportunityreports"
 	"github.com/careeros/api/internal/platform"
 	"github.com/careeros/api/internal/profile"
-	"github.com/careeros/api/internal/notifications"
 	"github.com/careeros/api/internal/recommendation"
 	"github.com/careeros/api/internal/researchverification"
 	"github.com/careeros/api/internal/saved"
@@ -27,6 +27,7 @@ import (
 func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 	r := chi.NewRouter()
 
+	r.Use(middleware.ClientIP(cfg.TrustedProxyHops))
 	r.Use(middleware.Recovery)
 	r.Use(middleware.RequestID)
 	r.Use(observability.HTTPMetricsMiddleware)
@@ -34,7 +35,6 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 	r.Use(middleware.SecurityHeaders(cfg.IsProduction()))
 	r.Use(middleware.CORS(cfg.CORSOrigin))
 	r.Use(middleware.CSRFOriginCheck(cfg.CORSOrigin))
-	r.Use(chimiddleware.RealIP)
 	r.Use(chimiddleware.NoCache)
 
 	r.Get("/health", platform.LivenessHandler())
@@ -85,23 +85,23 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 	reportHandler := opportunityreports.NewHandler(reportService)
 	adminHandler := admin.NewHandler(pool, reportService, researchVerifService)
 
-	adminGuard := middleware.RequireAdmin(cfg.AdminEmailSet())
+	adminGuard := middleware.RequireAdmin(cfg.AdminUserIDSet(), cfg.AdminEmailSet())
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/auth", func(r chi.Router) {
 			r.With(authLimiter.LimitByIP).Post("/register", authHandler.Register)
 			r.With(authLimiter.LimitByIP).Post("/login", authHandler.Login)
-			r.With(middleware.Authenticate(tokens)).Post("/logout", authHandler.Logout)
-			r.With(middleware.Authenticate(tokens)).Get("/me", authHandler.Me)
+			r.With(middleware.Authenticate(tokens, authRepo)).Post("/logout", authHandler.Logout)
+			r.With(middleware.Authenticate(tokens, authRepo)).Get("/me", authHandler.Me)
 		})
 
 		r.Route("/profile", func(r chi.Router) {
-			r.Use(middleware.Authenticate(tokens))
+			r.Use(middleware.Authenticate(tokens, authRepo))
 			r.Get("/", profileHandler.Get)
 			r.Put("/", profileHandler.Update)
 		})
 
 		r.Route("/opportunities", func(r chi.Router) {
-			r.Use(middleware.Authenticate(tokens))
+			r.Use(middleware.Authenticate(tokens, authRepo))
 			r.Get("/recommended", recHandler.List)
 			r.Post("/recommended/events", recHandler.RecordEvent)
 			r.Get("/", oppHandler.List)
@@ -111,10 +111,10 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 			r.With(reportLimiter.LimitByIP).Post("/{id}/report", reportHandler.Create)
 		})
 
-		r.With(middleware.Authenticate(tokens)).Get("/saved-opportunities", savedHandler.List)
+		r.With(middleware.Authenticate(tokens, authRepo)).Get("/saved-opportunities", savedHandler.List)
 
 		r.Route("/applications", func(r chi.Router) {
-			r.Use(middleware.Authenticate(tokens))
+			r.Use(middleware.Authenticate(tokens, authRepo))
 			r.Post("/", appHandler.Create)
 			r.Get("/", appHandler.List)
 			r.Get("/{id}", appHandler.GetByID)
@@ -123,7 +123,7 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 		})
 
 		r.Route("/notifications", func(r chi.Router) {
-			r.Use(middleware.Authenticate(tokens))
+			r.Use(middleware.Authenticate(tokens, authRepo))
 			r.Get("/", notifHandler.List)
 			r.Get("/unread-count", notifHandler.UnreadCount)
 			r.Post("/mark-all-read", notifHandler.MarkAllRead)
@@ -131,7 +131,7 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 		})
 
 		r.Route("/admin/research", func(r chi.Router) {
-			r.Use(middleware.Authenticate(tokens))
+			r.Use(middleware.Authenticate(tokens, authRepo))
 			r.Use(adminGuard)
 			r.Get("/queue", researchVerifHandler.ListQueue)
 			r.Get("/metrics", researchVerifHandler.GetMetrics)
@@ -141,7 +141,7 @@ func NewRouter(cfg *config.Config, pool *pgxpool.Pool) http.Handler {
 		})
 
 		r.Route("/admin", func(r chi.Router) {
-			r.Use(middleware.Authenticate(tokens))
+			r.Use(middleware.Authenticate(tokens, authRepo))
 			r.Use(adminGuard)
 			r.Get("/overview", adminHandler.GetOverview)
 			r.Get("/reports", reportHandler.ListQueue)

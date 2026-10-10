@@ -20,7 +20,7 @@ func TestNotificationsAPIFlow(t *testing.T) {
 	userID := getUserIDFromToken(t, router, token)
 
 	now := time.Date(2026, 8, 30, 12, 0, 0, 0, time.UTC)
-	deadline := now.UTC().Truncate(24 * time.Hour).AddDate(0, 0, 3)
+	deadline := now.UTC().Truncate(24*time.Hour).AddDate(0, 0, 3)
 	oppID := insertOpportunityWithDeadline(t, pool, deadline, "open")
 
 	notifRepo := notifications.NewRepository(pool)
@@ -170,4 +170,3 @@ func insertApplicationForUser(t *testing.T, pool *pgxpool.Pool, userID, oppID uu
 	}
 	return id
 }
-

@@ -12,6 +12,7 @@ import (
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/platform"
 	"github.com/careeros/api/internal/server"
+	"github.com/careeros/api/internal/testutil"
 )
 
 func TestHealthEndpoint_Liveness(t *testing.T) {
@@ -23,15 +24,15 @@ func TestHealthEndpoint_Liveness(t *testing.T) {
 	ctx := context.Background()
 	pool, err := db.Connect(ctx, databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	defer pool.Close()
 
 	cfg := &config.Config{
-		DatabaseURL: databaseURL,
-		APIPort:     "8080",
-		JWTSecret:   "test-secret-at-least-16-chars",
-		CORSOrigin:  "http://localhost:5173",
+		DatabaseURL:    databaseURL,
+		APIPort:        "8080",
+		JWTSecret:      "test-secret-at-least-16-chars",
+		CORSOrigin:     "http://localhost:5173",
 		MetricsEnabled: true,
 		Environment:    "development",
 	}
@@ -64,15 +65,15 @@ func TestReadyEndpoint_Connected(t *testing.T) {
 	ctx := context.Background()
 	pool, err := db.Connect(ctx, databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	defer pool.Close()
 
 	cfg := &config.Config{
-		DatabaseURL: databaseURL,
-		APIPort:     "8080",
-		JWTSecret:   "test-secret-at-least-16-chars",
-		CORSOrigin:  "http://localhost:5173",
+		DatabaseURL:    databaseURL,
+		APIPort:        "8080",
+		JWTSecret:      "test-secret-at-least-16-chars",
+		CORSOrigin:     "http://localhost:5173",
 		MetricsEnabled: true,
 		Environment:    "development",
 	}
