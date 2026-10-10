@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -30,43 +31,53 @@ func TestRecommendedOpportunitiesRankByProfile(t *testing.T) {
 	otherID := insertRecommendableOpportunity(t, pool, "REC-OTHER-"+uuid.NewString()[:8],
 		"Technology Analyst Intern", "other_technical", "internship", "on_site")
 
-	req := httptest.NewRequest(http.MethodGet, "/api/v1/opportunities/recommended?per_page=100", nil)
-	req.Header.Set("Authorization", "Bearer "+token)
-	rec := httptest.NewRecorder()
-	router.ServeHTTP(rec, req)
-
-	if rec.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d body=%s", rec.Code, rec.Body.String())
-	}
-
-	var resp struct {
-		Data []struct {
-			MatchScore  int `json:"match_score"`
-			Opportunity struct {
-				ID string `json:"id"`
-			} `json:"opportunity"`
-		} `json:"data"`
-		Meta struct {
-			EligibleCount int `json:"eligible_count"`
-		} `json:"meta"`
-	}
-	if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Meta.EligibleCount < 2 {
-		t.Fatalf("expected at least 2 eligible recommendations, got %d", resp.Meta.EligibleCount)
-	}
-
+	// Walk every page: a catalog with real ingested listings can push the
+	// lower-scoring fixture past the first page.
 	var sweScore, otherScore int
 	foundSWE, foundOther := false, false
-	for _, item := range resp.Data {
-		switch item.Opportunity.ID {
-		case sweID:
-			sweScore = item.MatchScore
-			foundSWE = true
-		case otherID:
-			otherScore = item.MatchScore
-			foundOther = true
+	for page := 1; ; page++ {
+		req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/opportunities/recommended?per_page=100&page=%d", page), nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		rec := httptest.NewRecorder()
+		router.ServeHTTP(rec, req)
+
+		if rec.Code != http.StatusOK {
+			t.Fatalf("expected 200, got %d body=%s", rec.Code, rec.Body.String())
+		}
+
+		var resp struct {
+			Data []struct {
+				MatchScore  int `json:"match_score"`
+				Opportunity struct {
+					ID string `json:"id"`
+				} `json:"opportunity"`
+			} `json:"data"`
+			Pagination struct {
+				TotalPages int `json:"total_pages"`
+			} `json:"pagination"`
+			Meta struct {
+				EligibleCount int `json:"eligible_count"`
+			} `json:"meta"`
+		}
+		if err := json.NewDecoder(rec.Body).Decode(&resp); err != nil {
+			t.Fatalf("decode: %v", err)
+		}
+		if resp.Meta.EligibleCount < 2 {
+			t.Fatalf("expected at least 2 eligible recommendations, got %d", resp.Meta.EligibleCount)
+		}
+
+		for _, item := range resp.Data {
+			switch item.Opportunity.ID {
+			case sweID:
+				sweScore = item.MatchScore
+				foundSWE = true
+			case otherID:
+				otherScore = item.MatchScore
+				foundOther = true
+			}
+		}
+		if (foundSWE && foundOther) || page >= resp.Pagination.TotalPages {
+			break
 		}
 	}
 	if !foundSWE || !foundOther {

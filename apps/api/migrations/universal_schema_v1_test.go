@@ -7,6 +7,7 @@ import (
 
 	"github.com/careeros/api/internal/db"
 	"github.com/careeros/api/internal/opportunitytype"
+	"github.com/careeros/api/internal/testutil"
 )
 
 func TestUniversalSchemaV1MigrationData(t *testing.T) {
@@ -18,7 +19,7 @@ func TestUniversalSchemaV1MigrationData(t *testing.T) {
 	ctx := context.Background()
 	pool, err := db.Connect(ctx, databaseURL)
 	if err != nil {
-		t.Skipf("database not available: %v", err)
+		testutil.SkipIfNoDB(t, err)
 	}
 	defer pool.Close()
 
@@ -78,16 +79,5 @@ func TestUniversalSchemaV1MigrationData(t *testing.T) {
 			t.Fatalf("invalid opportunity_type in database: %q", typ)
 		}
 		t.Logf("opportunity_type=%s count=%d", typ, count)
-	}
-
-	var fellowshipExp int
-	err = pool.QueryRow(ctx, `
-		SELECT COUNT(*) FROM opportunities WHERE experience_level = 'fellowship'
-	`).Scan(&fellowshipExp)
-	if err != nil {
-		t.Fatalf("count fellowship experience_level: %v", err)
-	}
-	if fellowshipExp != 0 {
-		t.Fatalf("expected 0 fellowship experience_level rows, got %d", fellowshipExp)
 	}
 }

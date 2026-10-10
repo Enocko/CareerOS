@@ -66,7 +66,7 @@ func (r *Repository) listPlain(ctx context.Context, studentID uuid.UUID, filter 
 		LEFT JOIN saved_opportunities so
 			ON so.opportunity_id = o.id AND so.student_id = $1
 		WHERE %s
-		ORDER BY %s
+		ORDER BY %s, o.id
 		LIMIT %s OFFSET %s
 	`, listWhere, orderBy, limitArg, offsetArg)
 
@@ -114,7 +114,7 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 			SELECT o.id,
 				ROW_NUMBER() OVER (
 					PARTITION BY %s
-					ORDER BY o.last_checked_at DESC NULLS LAST, o.created_at DESC
+					ORDER BY o.last_checked_at DESC NULLS LAST, o.created_at DESC, o.id
 				) AS pick_rank
 			FROM opportunities o
 			WHERE %s
@@ -163,7 +163,7 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 				SELECT *,
 				       ROW_NUMBER() OVER (
 				           PARTITION BY %s
-				           ORDER BY %s
+				           ORDER BY %s, id
 				       ) AS org_slot
 				FROM ranked
 				WHERE pick_rank = 1
@@ -175,7 +175,7 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 			       experience_level, career_family, relevance_tier,
 			       type_metadata, is_saved, listing_count
 			FROM diversified
-			ORDER BY org_slot ASC, %s
+			ORDER BY org_slot ASC, %s, id
 			LIMIT %s OFFSET %s
 		`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere,
 			orgDiversityPartitionSQL(), orderBy, diversifiedFinalOrderSQL(filter), limitArg, offsetArg)
@@ -207,7 +207,7 @@ func (r *Repository) listDeduped(ctx context.Context, studentID uuid.UUID, filte
 			       type_metadata, is_saved, listing_count
 			FROM ranked
 			WHERE pick_rank = 1
-			ORDER BY %s
+			ORDER BY %s, id
 			LIMIT %s OFFSET %s
 		`, partitionKey, dedupPickOrderSQL(), partitionKey, listWhere, orderBy, limitArg, offsetArg)
 	}
@@ -410,13 +410,7 @@ func buildListWhere(filter ListFilter, startIndex int) (string, []any) {
 	}
 
 	if filter.WorkArrangement != "" {
-		if filter.CatalogScope == CatalogScopeAll {
-			conditions = append(conditions, fmt.Sprintf(
-				"(o.opportunity_type = 'research' OR o.work_arrangement = $%d)", argIndex,
-			))
-		} else {
-			conditions = append(conditions, fmt.Sprintf("o.work_arrangement = $%d", argIndex))
-		}
+		conditions = append(conditions, fmt.Sprintf("o.work_arrangement = $%d", argIndex))
 		args = append(args, filter.WorkArrangement)
 		argIndex++
 	}

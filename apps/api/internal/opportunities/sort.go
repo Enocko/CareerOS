@@ -100,11 +100,14 @@ func mixedCatalogOrderBy(prefix string, sort string) string {
 		END`,
 		oppType, meta, oppType, meta, oppType, oppType, meta, oppType, meta)
 
+	// An explicit sort choice is the primary key; the research status bucket
+	// only breaks ties, otherwise programs with no deadline or an on-site
+	// arrangement would sit above the listings the student asked to see first.
 	switch sort {
 	case SortDeadline:
-		return statusBucket + ", " + deadline + " ASC NULLS LAST, " + freshnessOrderSQL(prefix)
+		return deadline + " ASC NULLS LAST, " + statusBucket + ", " + freshnessOrderSQL(prefix)
 	case SortArrangement:
-		return statusBucket + ", " + workArrangementRankSQL(arrangement) + ", " + freshnessOrderSQL(prefix)
+		return workArrangementRankSQL(arrangement) + ", " + statusBucket + ", " + freshnessOrderSQL(prefix)
 	default:
 		return statusBucket + ", " + newestOrderSQL(prefix)
 	}
@@ -179,5 +182,5 @@ func diversifiedFinalOrderSQL(filter ListFilter) string {
 }
 
 func dedupPickOrderSQL() string {
-	return `(so.id IS NOT NULL) DESC, ` + newestOrderSQL("o.")
+	return `(so.id IS NOT NULL) DESC, ` + newestOrderSQL("o.") + `, o.id`
 }
