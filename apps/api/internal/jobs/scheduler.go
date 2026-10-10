@@ -12,10 +12,10 @@ import (
 
 // Scheduler enqueues background work.
 type Scheduler struct {
-	jobsRepo  *Repository
+	jobsRepo   *Repository
 	ingestRepo *ingestion.Repository
-	notifRepo *notifications.Repository
-	cfg       Config
+	notifRepo  *notifications.Repository
+	cfg        Config
 }
 
 // NewScheduler creates a scheduler.
@@ -66,7 +66,7 @@ func (s *Scheduler) EnqueueDueIngestion(ctx context.Context, now time.Time) (int
 func (s *Scheduler) EnqueueDeadlineReminders(ctx context.Context, now time.Time) (int, error) {
 	enqueued := 0
 	for _, window := range s.cfg.ReminderWindows {
-		targetDate := now.UTC().Truncate(24 * time.Hour).AddDate(0, 0, window)
+		targetDate := now.UTC().Truncate(24*time.Hour).AddDate(0, 0, window)
 		deadlineStr := targetDate.Format("2006-01-02")
 
 		appRows, err := s.notifRepo.ListApplicationDeadlineCandidates(ctx, targetDate)

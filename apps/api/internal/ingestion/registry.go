@@ -7,8 +7,8 @@ import (
 
 	"github.com/careeros/api/internal/ingestion/ashby"
 	"github.com/careeros/api/internal/ingestion/greenhouse"
-	"github.com/careeros/api/internal/ingestion/lever"
 	"github.com/careeros/api/internal/ingestion/ingestrecord"
+	"github.com/careeros/api/internal/ingestion/lever"
 	"github.com/careeros/api/internal/ingestion/nsf_reu"
 	"github.com/careeros/api/internal/ingestion/usajobs"
 )
@@ -20,8 +20,8 @@ type HTTPDoer interface {
 
 // Credentials holds runtime secrets for ingestion adapters.
 type Credentials struct {
-	USAJobsAPIKey      string
-	USAJobsUserAgent   string
+	USAJobsAPIKey    string
+	USAJobsUserAgent string
 }
 
 // NewAdapterRegistry builds adapter factories with runtime credentials.

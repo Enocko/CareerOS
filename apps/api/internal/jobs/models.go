@@ -43,13 +43,13 @@ type IngestSourcePayload struct {
 
 // DeadlineReminderPayload targets a deadline notification.
 type DeadlineReminderPayload struct {
-	UserID         uuid.UUID  `json:"user_id"`
-	OpportunityID  uuid.UUID  `json:"opportunity_id"`
-	ApplicationID  *uuid.UUID `json:"application_id,omitempty"`
-	ReminderKind   string     `json:"reminder_kind"` // application | saved
-	DeadlineDate   string     `json:"deadline_date"` // YYYY-MM-DD
-	WindowDays     int        `json:"window_days"`
-	OpportunityTitle string   `json:"opportunity_title"`
+	UserID           uuid.UUID  `json:"user_id"`
+	OpportunityID    uuid.UUID  `json:"opportunity_id"`
+	ApplicationID    *uuid.UUID `json:"application_id,omitempty"`
+	ReminderKind     string     `json:"reminder_kind"` // application | saved
+	DeadlineDate     string     `json:"deadline_date"` // YYYY-MM-DD
+	WindowDays       int        `json:"window_days"`
+	OpportunityTitle string     `json:"opportunity_title"`
 }
 
 // Metrics summarizes queue health.

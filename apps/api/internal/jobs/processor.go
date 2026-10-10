@@ -24,11 +24,11 @@ type IngestionGuard interface {
 
 // Processor executes background jobs.
 type Processor struct {
-	jobsRepo     *Repository
-	ingestion    IngestionRunner
-	ingestGuard  IngestionGuard
+	jobsRepo      *Repository
+	ingestion     IngestionRunner
+	ingestGuard   IngestionGuard
 	notifications *notifications.Service
-	cfg          Config
+	cfg           Config
 }
 
 // NewProcessor creates a job processor.

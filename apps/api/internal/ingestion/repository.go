@@ -669,13 +669,13 @@ func (r *Repository) UpdateClassification(
 
 // ClassificationStats holds aggregate counts for reporting.
 type ClassificationStats struct {
-	Total                    int
-	TechnicalFeed            int
-	NonTechnical             int
-	Ambiguous                int
-	ByCareerFamily           map[string]int
-	ByExperienceLevel        map[string]int
-	ByEducationLevel         map[string]int
+	Total             int
+	TechnicalFeed     int
+	NonTechnical      int
+	Ambiguous         int
+	ByCareerFamily    map[string]int
+	ByExperienceLevel map[string]int
+	ByEducationLevel  map[string]int
 }
 
 // CountClassificationStats aggregates v2 fields for verified open opportunities.

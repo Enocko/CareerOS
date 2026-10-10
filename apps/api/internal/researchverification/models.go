@@ -9,16 +9,16 @@ import (
 
 // QueueItem is a prioritized NSF REU candidate awaiting or due for verification.
 type QueueItem struct {
-	ID               uuid.UUID       `json:"id"`
-	Title            string          `json:"title"`
-	OrganizationName string          `json:"organization_name"`
-	SourceURL        *string         `json:"source_url"`
-	ProgramURL       *string         `json:"program_url"`
-	ApplicationStatus string         `json:"application_status"`
-	TypeMetadata     json.RawMessage `json:"type_metadata"`
-	PriorityScore    int             `json:"priority_score"`
-	LastVerifiedAt   *time.Time      `json:"last_verified_at"`
-	NextVerificationAt *time.Time    `json:"next_verification_at"`
+	ID                 uuid.UUID       `json:"id"`
+	Title              string          `json:"title"`
+	OrganizationName   string          `json:"organization_name"`
+	SourceURL          *string         `json:"source_url"`
+	ProgramURL         *string         `json:"program_url"`
+	ApplicationStatus  string          `json:"application_status"`
+	TypeMetadata       json.RawMessage `json:"type_metadata"`
+	PriorityScore      int             `json:"priority_score"`
+	LastVerifiedAt     *time.Time      `json:"last_verified_at"`
+	NextVerificationAt *time.Time      `json:"next_verification_at"`
 }
 
 // VerificationRecord is a persisted availability verification event.
@@ -52,13 +52,13 @@ type VerifyRequest struct {
 
 // Metrics summarizes research verification catalog state.
 type Metrics struct {
-	CandidatePrograms          int `json:"candidate_nsf_reu_programs"`
-	AvailabilityUnknown        int `json:"availability_unknown"`
-	VerifiedPrograms           int `json:"verified_programs"`
-	ApplicationsOpen           int `json:"applications_open"`
-	ApplicationsUpcoming       int `json:"applications_upcoming"`
-	ApplicationsClosed         int `json:"applications_closed"`
-	DirectApplicationURLs      int `json:"direct_application_urls_verified"`
-	VerifiedDeadlines          int `json:"verified_deadlines"`
-	VerificationStale          int `json:"verification_stale"`
+	CandidatePrograms     int `json:"candidate_nsf_reu_programs"`
+	AvailabilityUnknown   int `json:"availability_unknown"`
+	VerifiedPrograms      int `json:"verified_programs"`
+	ApplicationsOpen      int `json:"applications_open"`
+	ApplicationsUpcoming  int `json:"applications_upcoming"`
+	ApplicationsClosed    int `json:"applications_closed"`
+	DirectApplicationURLs int `json:"direct_application_urls_verified"`
+	VerifiedDeadlines     int `json:"verified_deadlines"`
+	VerificationStale     int `json:"verification_stale"`
 }

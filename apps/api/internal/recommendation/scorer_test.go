@@ -9,12 +9,12 @@ import (
 
 func TestSWEStudentRanksSWEAboveUnrelated(t *testing.T) {
 	student := recommendation.StudentContext{
-		HasProfile:       true,
-		ProfileComplete:  true,
-		InferredFamilies: []string{"software_engineering"},
+		HasProfile:         true,
+		ProfileComplete:    true,
+		InferredFamilies:   []string{"software_engineering"},
 		PreferredExpLevels: []string{"internship", "new_grad"},
-		Skills:           []string{"python", "java"},
-		WorkArrangement:  "remote",
+		Skills:             []string{"python", "java"},
+		WorkArrangement:    "remote",
 	}
 	now := time.Date(2026, 8, 30, 12, 0, 0, 0, time.UTC)
 
@@ -136,9 +136,9 @@ func TestHardFilterAppliedOpportunity(t *testing.T) {
 func TestScoreBoundaries(t *testing.T) {
 	student := recommendation.StudentContext{
 		HasProfile: true, ProfileComplete: true,
-		InferredFamilies: []string{"software_engineering"},
+		InferredFamilies:   []string{"software_engineering"},
 		PreferredExpLevels: []string{"internship"},
-		Skills: []string{"python"}, WorkArrangement: "remote",
+		Skills:             []string{"python"}, WorkArrangement: "remote",
 		PreferredLocations: []string{"remote"},
 	}
 	now := time.Now().UTC()
@@ -161,7 +161,7 @@ func TestDeterministicOutput(t *testing.T) {
 	student := recommendation.StudentContext{
 		HasProfile: true, ProfileComplete: true,
 		InferredFamilies: []string{"machine_learning_ai"},
-		Skills: []string{"python"},
+		Skills:           []string{"python"},
 	}
 	c := recommendation.Candidate{
 		Title: "Machine Learning Intern", Status: "open", VerificationStatus: "verified",
@@ -176,5 +176,5 @@ func TestDeterministicOutput(t *testing.T) {
 	}
 }
 
-func ptr(s string) *string { return &s }
+func ptr(s string) *string           { return &s }
 func ptrTime(t time.Time) *time.Time { return &t }

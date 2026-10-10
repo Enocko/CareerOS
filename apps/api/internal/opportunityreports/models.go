@@ -11,12 +11,12 @@ const (
 	StatusResolved  = "resolved"
 	StatusDismissed = "dismissed"
 
-	ReasonAppearsClosed      = "appears_closed"
-	ReasonBrokenLink         = "broken_link"
-	ReasonIncorrectDeadline  = "incorrect_deadline"
-	ReasonDuplicate          = "duplicate"
-	ReasonIncorrectInfo      = "incorrect_info"
-	ReasonOther              = "other"
+	ReasonAppearsClosed     = "appears_closed"
+	ReasonBrokenLink        = "broken_link"
+	ReasonIncorrectDeadline = "incorrect_deadline"
+	ReasonDuplicate         = "duplicate"
+	ReasonIncorrectInfo     = "incorrect_info"
+	ReasonOther             = "other"
 )
 
 var ValidReasons = map[string]bool{
@@ -60,15 +60,15 @@ type UpdateStatusRequest struct {
 
 // QueueItem is an admin view of grouped pending reports.
 type QueueItem struct {
-	OpportunityID     uuid.UUID  `json:"opportunity_id"`
-	OpportunityTitle  string     `json:"opportunity_title"`
-	OrganizationName  string     `json:"organization_name"`
-	SourceName        string     `json:"source_name"`
-	SourceURL         *string    `json:"source_url,omitempty"`
-	OpportunityStatus string     `json:"opportunity_status"`
-	VerificationStatus string    `json:"verification_status"`
-	LastCheckedAt     *time.Time `json:"last_checked_at,omitempty"`
-	ReportCount       int        `json:"report_count"`
-	LatestReportAt    time.Time  `json:"latest_report_at"`
-	Reasons           []string   `json:"reasons"`
+	OpportunityID      uuid.UUID  `json:"opportunity_id"`
+	OpportunityTitle   string     `json:"opportunity_title"`
+	OrganizationName   string     `json:"organization_name"`
+	SourceName         string     `json:"source_name"`
+	SourceURL          *string    `json:"source_url,omitempty"`
+	OpportunityStatus  string     `json:"opportunity_status"`
+	VerificationStatus string     `json:"verification_status"`
+	LastCheckedAt      *time.Time `json:"last_checked_at,omitempty"`
+	ReportCount        int        `json:"report_count"`
+	LatestReportAt     time.Time  `json:"latest_report_at"`
+	Reasons            []string   `json:"reasons"`
 }

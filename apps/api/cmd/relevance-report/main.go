@@ -114,10 +114,10 @@ func auditFalseNegatives(ctx context.Context, repo *ingestion.Repository, client
 	lv := lever.NewAdapter(client)
 
 	type miss struct {
-		source string
+		source  string
 		adapter string
-		title  string
-		reason string
+		title   string
+		reason  string
 	}
 	var v1Misses []miss
 	var v2Recovered []miss

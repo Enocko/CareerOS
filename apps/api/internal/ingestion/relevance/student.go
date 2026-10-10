@@ -7,17 +7,17 @@ import (
 
 // Filter reason constants for ingestion diagnostics.
 const (
-	ReasonInternshipTitleMatch     = "internship_title_match"
-	ReasonNewGradMatch             = "new_grad_match"
-	ReasonEarlyCareerMatch         = "early_career_match"
-	ReasonStudentProgramMatch      = "student_program_match"
-	ReasonSeniorTitleExclusion     = "senior_title_exclusion"
-	ReasonExperienceExclusion      = "experience_requirement_exclusion"
-	ReasonRecruitingRoleExclusion  = "recruiting_role_exclusion"
-	ReasonNonRelevantRole          = "non_relevant_role"
-	ReasonNotListedExclusion       = "not_listed_exclusion"
-	ReasonEmptyTitle               = "empty_title"
-	ReasonUnknown                  = "unknown"
+	ReasonInternshipTitleMatch    = "internship_title_match"
+	ReasonNewGradMatch            = "new_grad_match"
+	ReasonEarlyCareerMatch        = "early_career_match"
+	ReasonStudentProgramMatch     = "student_program_match"
+	ReasonSeniorTitleExclusion    = "senior_title_exclusion"
+	ReasonExperienceExclusion     = "experience_requirement_exclusion"
+	ReasonRecruitingRoleExclusion = "recruiting_role_exclusion"
+	ReasonNonRelevantRole         = "non_relevant_role"
+	ReasonNotListedExclusion      = "not_listed_exclusion"
+	ReasonEmptyTitle              = "empty_title"
+	ReasonUnknown                 = "unknown"
 )
 
 var (

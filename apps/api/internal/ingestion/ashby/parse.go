@@ -15,24 +15,24 @@ type jobsResponse struct {
 }
 
 type job struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Department  string `json:"department"`
-	Team        string `json:"team"`
-	EmploymentType string `json:"employmentType"`
-	Location    string `json:"location"`
+	ID                 string `json:"id"`
+	Title              string `json:"title"`
+	Department         string `json:"department"`
+	Team               string `json:"team"`
+	EmploymentType     string `json:"employmentType"`
+	Location           string `json:"location"`
 	SecondaryLocations []struct {
 		Location string `json:"location"`
 	} `json:"secondaryLocations"`
-	PublishedAt string `json:"publishedAt"`
-	IsListed    bool   `json:"isListed"`
-	IsRemote    bool   `json:"isRemote"`
-	WorkplaceType string `json:"workplaceType"`
-	JobURL      string `json:"jobUrl"`
-	ApplyURL    string `json:"applyUrl"`
+	PublishedAt      string `json:"publishedAt"`
+	IsListed         bool   `json:"isListed"`
+	IsRemote         bool   `json:"isRemote"`
+	WorkplaceType    string `json:"workplaceType"`
+	JobURL           string `json:"jobUrl"`
+	ApplyURL         string `json:"applyUrl"`
 	DescriptionHTML  string `json:"descriptionHtml"`
 	DescriptionPlain string `json:"descriptionPlain"`
-	Compensation struct {
+	Compensation     struct {
 		CompensationTierSummary             *string `json:"compensationTierSummary"`
 		ScrapeableCompensationSalarySummary *string `json:"scrapeableCompensationSalarySummary"`
 	} `json:"compensation"`

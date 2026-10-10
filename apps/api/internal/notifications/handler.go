@@ -47,8 +47,8 @@ func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	platform.WriteJSON(w, http.StatusOK, map[string]any{
-		"data":    items,
-		"unread":  unread,
+		"data":   items,
+		"unread": unread,
 		"pagination": platform.Pagination{
 			Page:    page,
 			PerPage: perPage,

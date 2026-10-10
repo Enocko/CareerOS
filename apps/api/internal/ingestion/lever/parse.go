@@ -10,20 +10,20 @@ import (
 )
 
 type posting struct {
-	ID          string `json:"id"`
-	Text        string `json:"text"`
-	HostedURL   string `json:"hostedUrl"`
-	ApplyURL    string `json:"applyUrl"`
-	CreatedAt   int64  `json:"createdAt"`
-	WorkplaceType string `json:"workplaceType"`
+	ID                   string `json:"id"`
+	Text                 string `json:"text"`
+	HostedURL            string `json:"hostedUrl"`
+	ApplyURL             string `json:"applyUrl"`
+	CreatedAt            int64  `json:"createdAt"`
+	WorkplaceType        string `json:"workplaceType"`
 	DescriptionPlain     string `json:"descriptionPlain"`
 	DescriptionBodyPlain string `json:"descriptionBodyPlain"`
 	Description          string `json:"description"`
-	Categories  struct {
-		Team        string   `json:"team"`
-		Department  string   `json:"department"`
-		Location    string   `json:"location"`
-		Commitment  string   `json:"commitment"`
+	Categories           struct {
+		Team         string   `json:"team"`
+		Department   string   `json:"department"`
+		Location     string   `json:"location"`
+		Commitment   string   `json:"commitment"`
 		AllLocations []string `json:"allLocations"`
 	} `json:"categories"`
 }

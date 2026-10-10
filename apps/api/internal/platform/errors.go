@@ -6,12 +6,12 @@ import "net/http"
 type ErrorCode string
 
 const (
-	ErrorCodeValidation  ErrorCode = "VALIDATION_ERROR"
+	ErrorCodeValidation   ErrorCode = "VALIDATION_ERROR"
 	ErrorCodeUnauthorized ErrorCode = "UNAUTHORIZED"
-	ErrorCodeForbidden   ErrorCode = "FORBIDDEN"
-	ErrorCodeNotFound    ErrorCode = "NOT_FOUND"
-	ErrorCodeConflict    ErrorCode = "CONFLICT"
-	ErrorCodeInternal    ErrorCode = "INTERNAL_ERROR"
+	ErrorCodeForbidden    ErrorCode = "FORBIDDEN"
+	ErrorCodeNotFound     ErrorCode = "NOT_FOUND"
+	ErrorCodeConflict     ErrorCode = "CONFLICT"
+	ErrorCodeInternal     ErrorCode = "INTERNAL_ERROR"
 )
 
 // FieldError describes a validation error for a specific field.

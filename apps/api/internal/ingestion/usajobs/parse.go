@@ -25,20 +25,20 @@ type searchResultItem struct {
 }
 
 type matchedObject struct {
-	PositionID               string   `json:"PositionID"`
-	PositionTitle            string   `json:"PositionTitle"`
-	OrganizationName         string   `json:"OrganizationName"`
-	DepartmentName           string   `json:"DepartmentName"`
-	PositionURI              string   `json:"PositionURI"`
-	ApplyURI                 []string `json:"ApplyURI"`
-	PositionLocationDisplay  string   `json:"PositionLocationDisplay"`
+	PositionID                   string   `json:"PositionID"`
+	PositionTitle                string   `json:"PositionTitle"`
+	OrganizationName             string   `json:"OrganizationName"`
+	DepartmentName               string   `json:"DepartmentName"`
+	PositionURI                  string   `json:"PositionURI"`
+	ApplyURI                     []string `json:"ApplyURI"`
+	PositionLocationDisplay      string   `json:"PositionLocationDisplay"`
 	PositionFormattedDescription []struct {
-		Label string `json:"Label"`
+		Label   string `json:"Label"`
 		Content string `json:"Content"`
 	} `json:"PositionFormattedDescription"`
 	PositionRemuneration []struct {
-		MinimumRange string `json:"MinimumRange"`
-		MaximumRange string `json:"MaximumRange"`
+		MinimumRange     string `json:"MinimumRange"`
+		MaximumRange     string `json:"MaximumRange"`
 		RateIntervalCode string `json:"RateIntervalCode"`
 	} `json:"PositionRemuneration"`
 	PositionScheduleTypeCode string `json:"PositionScheduleTypeCode"`
@@ -193,8 +193,8 @@ func mapWorkArrangement(remote, telework bool) string {
 }
 
 func mapCompensation(items []struct {
-	MinimumRange string `json:"MinimumRange"`
-	MaximumRange string `json:"MaximumRange"`
+	MinimumRange     string `json:"MinimumRange"`
+	MaximumRange     string `json:"MaximumRange"`
 	RateIntervalCode string `json:"RateIntervalCode"`
 }) string {
 	if len(items) == 0 {

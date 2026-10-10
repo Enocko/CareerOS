@@ -17,11 +17,11 @@ import (
 )
 
 const (
-	defaultBaseURL     = "https://boards-api.greenhouse.io/v1/boards"
-	defaultPerPage     = 100
-	maxPerPage         = 500
-	defaultPageDelay   = 200 * time.Millisecond
-	defaultMaxRetries  = 2
+	defaultBaseURL    = "https://boards-api.greenhouse.io/v1/boards"
+	defaultPerPage    = 100
+	maxPerPage        = 500
+	defaultPageDelay  = 200 * time.Millisecond
+	defaultMaxRetries = 2
 )
 
 // HTTPDoer is satisfied by *http.Client for test injection.

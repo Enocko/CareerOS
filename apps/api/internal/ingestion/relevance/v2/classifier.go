@@ -15,26 +15,26 @@ const (
 )
 
 var (
-	internPattern = regexp.MustCompile(`(?i)\bintern(ship)?\b`)
-	coopPattern   = regexp.MustCompile(`(?i)\bco-?op\b`)
-	newGradPattern = regexp.MustCompile(`(?i)\bnew\s?grad(uate)?\b`)
+	internPattern      = regexp.MustCompile(`(?i)\bintern(ship)?\b`)
+	coopPattern        = regexp.MustCompile(`(?i)\bco-?op\b`)
+	newGradPattern     = regexp.MustCompile(`(?i)\bnew\s?grad(uate)?\b`)
 	earlyCareerPattern = regexp.MustCompile(`(?i)\bearly\s+career\b`)
-	campusPattern = regexp.MustCompile(`(?i)\bcampus\b`)
-	apprenticePattern = regexp.MustCompile(`(?i)\bapprentice(ship)?\b`)
-	fellowPattern = regexp.MustCompile(`(?i)\bfellow(ship)?\b`)
+	campusPattern      = regexp.MustCompile(`(?i)\bcampus\b`)
+	apprenticePattern  = regexp.MustCompile(`(?i)\bapprentice(ship)?\b`)
+	fellowPattern      = regexp.MustCompile(`(?i)\bfellow(ship)?\b`)
 
-	entryLevelEngineerPattern = regexp.MustCompile(`(?i)\b(associate\s+software|graduate\s+software|university\s+graduate|entry[\s-]level\s+(engineer|developer)|developer\s+intern|research\s+engineer|applied\s+scientist|technology\s+analyst)\b`)
+	entryLevelEngineerPattern     = regexp.MustCompile(`(?i)\b(associate\s+software|graduate\s+software|university\s+graduate|entry[\s-]level\s+(engineer|developer)|developer\s+intern|research\s+engineer|applied\s+scientist|technology\s+analyst)\b`)
 	softwareEngineerILevelPattern = regexp.MustCompile(`(?i)\bsoftware\s+engineer\s+i\b`)
-	seniorLevelEngineerIPattern = regexp.MustCompile(`(?i)\b(staff|principal|senior)\b.*\bengineer\s+i\b`)
+	seniorLevelEngineerIPattern   = regexp.MustCompile(`(?i)\b(staff|principal|senior)\b.*\bengineer\s+i\b`)
 
 	seniorPattern = regexp.MustCompile(`(?i)\b(senior|staff|principal|distinguished|director|vice\s+president|\bvp\b)\b`)
 
 	recruitingRolePattern = regexp.MustCompile(`(?i)\b(university\s+recruiter|campus\s+recruiter|talent\s+acquisition|recruiting\s+manager)\b`)
 
-	phdPattern = regexp.MustCompile(`(?i)\b(ph\.?\s*d\.?|doctorate|doctoral)\b`)
-	mastersPattern = regexp.MustCompile(`(?i)\b(master'?s|m\.?\s*s\.?\b|mba)\b`)
+	phdPattern       = regexp.MustCompile(`(?i)\b(ph\.?\s*d\.?|doctorate|doctoral)\b`)
+	mastersPattern   = regexp.MustCompile(`(?i)\b(master'?s|m\.?\s*s\.?\b|mba)\b`)
 	undergradPattern = regexp.MustCompile(`(?i)\b(undergraduate|undergrad|bachelor'?s)\b`)
-	graduatePattern = regexp.MustCompile(`(?i)\bgraduate\b`)
+	graduatePattern  = regexp.MustCompile(`(?i)\bgraduate\b`)
 
 	nonTechnicalRules = []struct {
 		subfamily string

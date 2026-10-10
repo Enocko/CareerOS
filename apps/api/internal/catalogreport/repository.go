@@ -62,11 +62,11 @@ type SourceHealthRow struct {
 
 // URLIssue flags suspicious application URLs.
 type URLIssue struct {
-	ID               uuid.UUID
-	Title            string
-	Source           string
-	ApplicationURL   string
-	Issue            string
+	ID             uuid.UUID
+	Title          string
+	Source         string
+	ApplicationURL string
+	Issue          string
 }
 
 const testIDFilter = `(

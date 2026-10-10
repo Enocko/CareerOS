@@ -8,8 +8,8 @@ import (
 
 func TestClassifyURL(t *testing.T) {
 	tests := []struct {
-		url    string
-		issue  string
+		url   string
+		issue string
 	}{
 		{"https://localhost/jobs/1", "localhost/test host"},
 		{"https://etap.nsf.gov/", "generic ETAP homepage"},

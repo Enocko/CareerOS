@@ -11,10 +11,10 @@ import (
 
 	"github.com/careeros/api/internal/config"
 	"github.com/careeros/api/internal/db"
-	"github.com/careeros/api/internal/observability"
 	"github.com/careeros/api/internal/ingestion"
 	"github.com/careeros/api/internal/jobs"
 	"github.com/careeros/api/internal/notifications"
+	"github.com/careeros/api/internal/observability"
 	"github.com/google/uuid"
 )
 

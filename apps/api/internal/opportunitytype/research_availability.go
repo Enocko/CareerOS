@@ -11,12 +11,12 @@ const (
 
 // How application availability was determined.
 const (
-	AvailabilityMethodUnknown          = "unknown"
-	AvailabilityMethodNSFAwardOnly     = "nsf_award_only"
-	AvailabilityMethodAutomatedOfficial = "automated_official"
-	AvailabilityMethodManualVerified   = "manual_verified"
+	AvailabilityMethodUnknown            = "unknown"
+	AvailabilityMethodNSFAwardOnly       = "nsf_award_only"
+	AvailabilityMethodAutomatedOfficial  = "automated_official"
+	AvailabilityMethodManualVerified     = "manual_verified"
 	AvailabilityMethodManualOfficialPage = "manual_official_page"
-	AvailabilityMethodPartnerVerified  = "partner_verified"
+	AvailabilityMethodPartnerVerified    = "partner_verified"
 )
 
 var validApplicationStatuses = map[string]struct{}{
@@ -27,12 +27,12 @@ var validApplicationStatuses = map[string]struct{}{
 }
 
 var validAvailabilityMethods = map[string]struct{}{
-	AvailabilityMethodUnknown:           {},
-	AvailabilityMethodNSFAwardOnly:      {},
-	AvailabilityMethodAutomatedOfficial: {},
-	AvailabilityMethodManualVerified:    {},
+	AvailabilityMethodUnknown:            {},
+	AvailabilityMethodNSFAwardOnly:       {},
+	AvailabilityMethodAutomatedOfficial:  {},
+	AvailabilityMethodManualVerified:     {},
 	AvailabilityMethodManualOfficialPage: {},
-	AvailabilityMethodPartnerVerified:   {},
+	AvailabilityMethodPartnerVerified:    {},
 }
 
 // ValidApplicationStatus reports whether s is a supported application_status value.
@@ -52,7 +52,7 @@ func ValidAvailabilityMethod(m string) bool {
 func DefaultResearchAvailabilityMetadata() map[string]string {
 	return map[string]string{
 		"application_status":               ApplicationStatusUnknown,
-		"application_status_method":          AvailabilityMethodNSFAwardOnly,
+		"application_status_method":        AvailabilityMethodNSFAwardOnly,
 		"availability_verification_method": AvailabilityMethodUnknown,
 	}
 }

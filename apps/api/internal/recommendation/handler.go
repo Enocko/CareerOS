@@ -26,9 +26,9 @@ func NewHandler(service *Service) *Handler {
 }
 
 type recommendResponse struct {
-	Data       []Result       `json:"data"`
+	Data       []Result            `json:"data"`
 	Pagination platform.Pagination `json:"pagination"`
-	Meta       RecommendMeta  `json:"meta"`
+	Meta       RecommendMeta       `json:"meta"`
 }
 
 // List handles GET /api/v1/opportunities/recommended.

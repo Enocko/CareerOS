@@ -2,21 +2,21 @@ package opportunitytype
 
 // Canonical opportunity types (Model C).
 const (
-	Employment   = "employment"
-	Research     = "research"
-	Scholarship  = "scholarship"
-	Fellowship   = "fellowship"
-	Program      = "program"
-	Event        = "event"
-	Competition  = "competition"
-	Other        = "other"
+	Employment  = "employment"
+	Research    = "research"
+	Scholarship = "scholarship"
+	Fellowship  = "fellowship"
+	Program     = "program"
+	Event       = "event"
+	Competition = "competition"
+	Other       = "other"
 )
 
 // Verification methods complement verification_status.
 const (
-	VerificationOfficialSource   = "official_source"
-	VerificationPartner          = "partner"
-	VerificationManualVerified   = "manual_verified"
+	VerificationOfficialSource    = "official_source"
+	VerificationPartner           = "partner"
+	VerificationManualVerified    = "manual_verified"
 	VerificationCommunityVerified = "community_verified"
 )
 

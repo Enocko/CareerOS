@@ -21,8 +21,8 @@ func TestUnifiedBrowseAllIncludesEmploymentAndResearch(t *testing.T) {
 	_ = insertVerifiedResearchOpportunity(t, pool)
 
 	for _, query := range []struct {
-		q    string
-		typ  string
+		q   string
+		typ string
 	}{
 		{q: "BrowseTestCorp", typ: "employment"},
 		{q: "Quantum", typ: "research"},

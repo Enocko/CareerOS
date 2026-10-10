@@ -183,18 +183,18 @@ func (a *Adapter) fetchPage(ctx context.Context, cfg Config, offset int) ([]byte
 }
 
 type nsfAward struct {
-	ID              string `json:"id"`
-	Title           string `json:"title"`
-	AbstractText    string `json:"abstractText"`
-	AwardeeName     string `json:"awardeeName"`
-	AwardeeCity     string `json:"awardeeCity"`
+	ID               string `json:"id"`
+	Title            string `json:"title"`
+	AbstractText     string `json:"abstractText"`
+	AwardeeName      string `json:"awardeeName"`
+	AwardeeCity      string `json:"awardeeCity"`
 	AwardeeStateCode string `json:"awardeeStateCode"`
-	StartDate       string `json:"startDate"`
-	ExpDate         string `json:"expDate"`
-	Program         string `json:"program"`
-	OrgLongName     string `json:"orgLongName"`
-	FundProgramName string `json:"fundProgramName"`
-	ActiveAwd       string `json:"activeAwd"`
+	StartDate        string `json:"startDate"`
+	ExpDate          string `json:"expDate"`
+	Program          string `json:"program"`
+	OrgLongName      string `json:"orgLongName"`
+	FundProgramName  string `json:"fundProgramName"`
+	ActiveAwd        string `json:"activeAwd"`
 }
 
 func parseAwardsResponse(body []byte) ([]nsfAward, int, error) {
@@ -307,20 +307,20 @@ func normalizeAward(award nsfAward) (ingestrecord.RawOpportunity, bool, string) 
 }
 
 type researchMeta struct {
-	ResearchArea                     *string `json:"research_area,omitempty"`
-	DurationWeeks                    *int    `json:"duration_weeks,omitempty"`
-	ProgramStart                     *string `json:"program_start,omitempty"`
-	ProgramEnd                       *string `json:"program_end,omitempty"`
-	ProgramURL                       *string `json:"program_url,omitempty"`
-	ApplicationStatus                string  `json:"application_status"`
-	ApplicationStatusMethod          string  `json:"application_status_method"`
-	AvailabilityVerificationMethod   string  `json:"availability_verification_method"`
+	ResearchArea                   *string `json:"research_area,omitempty"`
+	DurationWeeks                  *int    `json:"duration_weeks,omitempty"`
+	ProgramStart                   *string `json:"program_start,omitempty"`
+	ProgramEnd                     *string `json:"program_end,omitempty"`
+	ProgramURL                     *string `json:"program_url,omitempty"`
+	ApplicationStatus              string  `json:"application_status"`
+	ApplicationStatusMethod        string  `json:"application_status_method"`
+	AvailabilityVerificationMethod string  `json:"availability_verification_method"`
 }
 
 func buildTypeMetadata(award nsfAward, expDate time.Time, links classifiedURLs) researchMeta {
 	meta := researchMeta{
 		ApplicationStatus:              opportunitytype.ApplicationStatusUnknown,
-		ApplicationStatusMethod:          opportunitytype.AvailabilityMethodNSFAwardOnly,
+		ApplicationStatusMethod:        opportunitytype.AvailabilityMethodNSFAwardOnly,
 		AvailabilityVerificationMethod: opportunitytype.AvailabilityMethodUnknown,
 	}
 

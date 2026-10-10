@@ -4,13 +4,13 @@ package v2
 type ExperienceLevel string
 
 const (
-	ExperienceInternship    ExperienceLevel = "internship"
-	ExperienceCoOp          ExperienceLevel = "co_op"
-	ExperienceNewGrad       ExperienceLevel = "new_grad"
-	ExperienceEarlyCareer   ExperienceLevel = "early_career"
+	ExperienceInternship     ExperienceLevel = "internship"
+	ExperienceCoOp           ExperienceLevel = "co_op"
+	ExperienceNewGrad        ExperienceLevel = "new_grad"
+	ExperienceEarlyCareer    ExperienceLevel = "early_career"
 	ExperienceApprenticeship ExperienceLevel = "apprenticeship"
-	ExperienceFellowship    ExperienceLevel = "fellowship"
-	ExperienceUnknown       ExperienceLevel = "unknown"
+	ExperienceFellowship     ExperienceLevel = "fellowship"
+	ExperienceUnknown        ExperienceLevel = "unknown"
 )
 
 // CareerFamily groups roles into technical career categories served by CareerOS.

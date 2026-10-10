@@ -24,11 +24,11 @@ func TestEvaluationFixtureRelativeRanking(t *testing.T) {
 			name: "CS student interested in SWE",
 			student: recommendation.StudentContext{
 				HasProfile: true, ProfileComplete: true,
-				Major: "Computer Science",
-				InferredFamilies: []string{"software_engineering"},
+				Major:              "Computer Science",
+				InferredFamilies:   []string{"software_engineering"},
 				PreferredExpLevels: []string{"internship"},
-				Skills: []string{"python"},
-				WorkArrangement: "remote",
+				Skills:             []string{"python"},
+				WorkArrangement:    "remote",
 			},
 			items: []namedCandidate{
 				{name: "swe", c: baseCandidate("Software Engineer Intern", "software_engineering", "internship", "remote", deadline, checked)},
@@ -40,9 +40,9 @@ func TestEvaluationFixtureRelativeRanking(t *testing.T) {
 			name: "Data science student",
 			student: recommendation.StudentContext{
 				HasProfile: true, ProfileComplete: true,
-				CareerInterests: []string{"data science"},
+				CareerInterests:  []string{"data science"},
 				InferredFamilies: []string{"data_science"},
-				Skills: []string{"python", "sql"},
+				Skills:           []string{"python", "sql"},
 			},
 			items: []namedCandidate{
 				{name: "ds", c: baseCandidate("Data Science Intern", "data_science", "internship", "hybrid", deadline, checked)},
@@ -54,7 +54,7 @@ func TestEvaluationFixtureRelativeRanking(t *testing.T) {
 			name: "Cybersecurity student",
 			student: recommendation.StudentContext{
 				HasProfile: true, ProfileComplete: true,
-				DesiredRoles: []string{"security engineer"},
+				DesiredRoles:     []string{"security engineer"},
 				InferredFamilies: []string{"cybersecurity"},
 			},
 			items: []namedCandidate{
@@ -106,7 +106,7 @@ func baseCandidate(title, family, exp, work string, deadline, checked time.Time)
 		WorkArrangement: work, Status: "open", VerificationStatus: "verified",
 		CareerFamily: &family, ExperienceLevel: &exp,
 		RelevanceTier: strPtr("high_confidence_technical"),
-		Deadline: &deadline, LastCheckedAt: &checked,
+		Deadline:      &deadline, LastCheckedAt: &checked,
 	}
 }
 
